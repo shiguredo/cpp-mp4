@@ -1,0 +1,84 @@
+name: build-workflow
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - master
+      - develop
+    tags:
+      - 202*
+    paths-ignore:
+      - 'doc/**'
+      - '**.md'
+      - 'THANKS'
+      - 'LICENSE'
+      - 'NOTICE'
+
+jobs:
+  build-linux:
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-20.04_x86_64
+    name: Build hisui for ${{ matrix.os }}
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Install packages
+        shell: bash
+        run: |
+          sudo apt update
+          sudo apt install -yq ccache
+          sudo rm -rf /var/lib/apt/lists/*
+        env:
+            DEBIAN_FRONTEND: noninteractive
+      - uses: actions/checkout@v2
+      - name: Cache release directory
+        id: cache-release
+        uses: actions/cache@v2
+        with:
+          path: release/_deps
+          key: ${{ matrix.os }}-release-deps-${{ hashFiles(format('{0}{1}', github.workspace, '/release/Makefile')) }}
+          restore-keys: ${{ matrix.os }}-release-deps-
+      - name: Clear release directory
+        if: steps.cache-release.outputs.cache-hit != 'true'
+        run: rm -rf release
+      - name: Prepare ccache timestamp
+        id: ccache_cache_timestamp
+        shell: cmake -P {0}
+        run: |
+          string(TIMESTAMP current_date "%Y-%m-%d-%H:%M:%S" UTC)
+          message("::set-output name=timestamp::${current_date}")
+      - name: Cache ~/.ccache directory
+        id: cache-ccache
+        uses: actions/cache@v2
+        with:
+          path: ~/.ccache
+          key: ${{ matrix.os }}-ccache-dir-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
+          restore-keys: ${{ matrix.os }}-ccache-dir-
+      - name: Ccache stat
+        run: ccache -s
+      - name: mkdir release
+        shell: bash
+        run: |
+          [ -d release ] || mkdir release
+      - name: cmake
+        run: cmake .. -DCMAKE_BUILD_TYPE=Release -DWITH_TEST=YES -DWITH_CLI=YES -WITH_EXAMPLE=YES
+        working-directory: release
+        timeout-minutes: 120
+      - name: build
+        run:  cmake --build release
+        timeout-minutes: 120
+      - name: Test cpp-mp4
+        run: cmake --build release --target test -- ARGS='-V'
+      - name: Slack Notification
+        if: failure()
+        uses: rtCamp/action-slack-notify@v2.1.0
+        env:
+          SLACK_CHANNEL: hisui
+          SLACK_COLOR: danger
+          SLACK_TITLE: Failure build-linux ${{ matrix.os }}
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+
