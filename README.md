@@ -1,6 +1,6 @@
 # cpp-mp4
 
-[![GitHub tag (latest SemVer)](https://img.shields.io/github/tag/shiguredo/hisui.svg)](https://github.com/shiguredo/hisui)
+[![GitHub tag (latest SemVer)](https://img.shields.io/github/tag/shiguredo/mp4.svg)](https://github.com/shiguredo/mp4)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 ## About Support
