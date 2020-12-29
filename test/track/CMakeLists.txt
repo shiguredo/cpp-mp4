@@ -1,0 +1,140 @@
+cmake_minimum_required(VERSION 3.16)
+
+set(CMAKE_C_COMPILER clang)
+set(CMAKE_CXX_COMPILER clang++)
+
+add_compile_options(
+    -Wall
+    -Wextra
+    -Wshadow
+    -Wnon-virtual-dtor
+    -Wunused
+    -Wold-style-cast
+    -Wcast-align
+    -Woverloaded-virtual
+    -Wconversion
+    -Wsign-conversion
+    -Wmisleading-indentation
+    -pedantic)
+
+add_executable(track_test
+    main.cpp
+    track.cpp
+    ../../src/bitio/bitio.cpp
+    ../../src/bitio/reader.cpp
+    ../../src/bitio/writer.cpp
+    ../../src/box_header.cpp
+    ../../src/box_info.cpp
+    ../../src/box_type.cpp
+    ../../src/box/avc.cpp
+    ../../src/box/btrt.cpp
+    ../../src/box/co64.cpp
+    ../../src/box/colr.cpp
+    ../../src/box/ctts.cpp
+    ../../src/box/data.cpp
+    ../../src/box/dinf.cpp
+    ../../src/box/dOps.cpp
+    ../../src/box/dref.cpp
+    ../../src/box/edts.cpp
+    ../../src/box/elst.cpp
+    ../../src/box/emsg.cpp
+    ../../src/box/esds.cpp
+    ../../src/box/free.cpp
+    ../../src/box/ftyp.cpp
+    ../../src/box/hdlr.cpp
+    ../../src/box/ilst.cpp
+    ../../src/box/iods.cpp
+    ../../src/box/mdat.cpp
+    ../../src/box/mdhd.cpp
+    ../../src/box/mdia.cpp
+    ../../src/box/mehd.cpp
+    ../../src/box/meta.cpp
+    ../../src/box/mfhd.cpp
+    ../../src/box/mfra.cpp
+    ../../src/box/mfro.cpp
+    ../../src/box/minf.cpp
+    ../../src/box/moof.cpp
+    ../../src/box/moov.cpp
+    ../../src/box/mvex.cpp
+    ../../src/box/mvhd.cpp
+    ../../src/box/pixel_aspect_ratio.cpp
+    ../../src/box/pssh.cpp
+    ../../src/box/sample_entry.cpp
+    ../../src/box/sbgp.cpp
+    ../../src/box/schi.cpp
+    ../../src/box/sdtp.cpp
+    ../../src/box/sgpd.cpp
+    ../../src/box/sidx.cpp
+    ../../src/box/sinf.cpp
+    ../../src/box/skip.cpp
+    ../../src/box/smhd.cpp
+    ../../src/box/stbl.cpp
+    ../../src/box/stco.cpp
+    ../../src/box/stsc.cpp
+    ../../src/box/stsd.cpp
+    ../../src/box/stss.cpp
+    ../../src/box/stsz.cpp
+    ../../src/box/stts.cpp
+    ../../src/box/styp.cpp
+    ../../src/box/tfdt.cpp
+    ../../src/box/tfhd.cpp
+    ../../src/box/tfra.cpp
+    ../../src/box/tkhd.cpp
+    ../../src/box/traf.cpp
+    ../../src/box/trak.cpp
+    ../../src/box/trex.cpp
+    ../../src/box/trun.cpp
+    ../../src/box/udta.cpp
+    ../../src/box/vmhd.cpp
+    ../../src/box/url.cpp
+    ../../src/box/urn.cpp
+    ../../src/box/unsupported.cpp
+    ../../src/box/vpc.cpp
+    ../../src/box/wave.cpp
+    ../../src/box.cpp
+    ../../src/endian/endian.cpp
+    ../../src/stream/stream.cpp
+    ../../src/time/time.cpp
+    ../../src/track/track.cpp
+    )
+
+set_target_properties(track_test PROPERTIES CXX_STANDARD 20 C_STANDARD 11)
+
+target_include_directories(track_test
+    PRIVATE
+    ../../include
+    ${boost_algorithm_SOURCE_DIR}/include
+    ${boost_assert_SOURCE_DIR}/include
+    ${boost_bind_SOURCE_DIR}/include
+    ${boost_config_SOURCE_DIR}/include
+    ${boost_container_hash_SOURCE_DIR}/include
+    ${boost_core_SOURCE_DIR}/include
+    ${boost_detail_SOURCE_DIR}/include
+    ${boost_exception_SOURCE_DIR}/include
+    ${boost_function_SOURCE_DIR}/include
+    ${boost_integer_SOURCE_DIR}/include
+    ${boost_io_SOURCE_DIR}/include
+    ${boost_iterator_SOURCE_DIR}/include
+    ${boost_move_SOURCE_DIR}/include
+    ${boost_mpl_SOURCE_DIR}/include
+    ${boost_numeric_conversion_SOURCE_DIR}/include
+    ${boost_preprocessor_SOURCE_DIR}/include
+    ${boost_range_SOURCE_DIR}/include
+    ${boost_smart_ptr_SOURCE_DIR}/include
+    ${boost_static_assert_SOURCE_DIR}/include
+    ${boost_test_SOURCE_DIR}/include
+    ${boost_throw_exception_SOURCE_DIR}/include
+    ${boost_type_index_SOURCE_DIR}/include
+    ${boost_type_traits_SOURCE_DIR}/include
+    ${boost_utility_SOURCE_DIR}/include
+    ${fmt_SOURCE_DIR}/include
+    ${spdlog_SOURCE_DIR}/include
+    )
+
+target_link_libraries(track_test
+    PRIVATE
+    fmt
+    spdlog
+    )
+
+add_test(NAME track COMMAND track_test)
