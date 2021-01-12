@@ -6,6 +6,8 @@
 #include <algorithm>
 #include <chrono>
 #include <cstdint>
+#include <cstdio>
+#include <cstring>
 #include <iterator>
 #include <limits>
 #include <stdexcept>
@@ -141,13 +143,13 @@ std::uint64_t FaststartWriter::getMdatHeaderSize() const {
 }
 
 void FaststartWriter::copyMdatData() {
-  if (auto ret = ::fseek(m_mdat_fd, 0, SEEK_SET); ret == -1) {
+  if (auto ret = std::fseek(m_mdat_fd, 0, SEEK_SET); ret == -1) {
     throw std::runtime_error("fseek failed");
   }
 
   char buffer[COPY_MDAT_DATA_BUFFER_SIZE];
-  while (!::feof(m_mdat_fd)) {
-    std::size_t size = ::fread(buffer, 1, COPY_MDAT_DATA_BUFFER_SIZE, m_mdat_fd);
+  while (!std::feof(m_mdat_fd)) {
+    std::size_t size = std::fread(buffer, 1, COPY_MDAT_DATA_BUFFER_SIZE, m_mdat_fd);
     std::copy_n(buffer, size, std::ostreambuf_iterator<char>(m_os));
     if (!m_os.good()) {
       throw std::runtime_error(
@@ -155,7 +157,7 @@ void FaststartWriter::copyMdatData() {
     }
   }
 
-  if (auto ret = ::fclose(m_mdat_fd); ret == EOF) {
+  if (auto ret = std::fclose(m_mdat_fd); ret == EOF) {
     throw std::runtime_error(
         fmt::format("FaststartWriter::copyMdatData(): cannot close the intermediate file: {}", m_mdat_path.string()));
   }
