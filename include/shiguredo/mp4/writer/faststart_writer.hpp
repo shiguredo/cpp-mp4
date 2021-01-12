@@ -42,6 +42,8 @@ class FaststartWriter : public Writer {
   void appendTrakAndUdtaBoxInfo(const std::vector<shiguredo::mp4::track::Track*>&) override;
   void writeMdatHeader();
   void copyMdatData();
+  void deleteIntermediateFile();
+  std::filesystem::path getIntermediateFilePath();
 
  private:
   std::ostream& m_os;

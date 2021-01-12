@@ -7,7 +7,7 @@ get_input_files:
 	[ -f input/sample-5s.mp4  ] || curl -o input/sample-5s.mp4 https://samplelib.com/lib/download/mp4/sample-5s.mp4 # "Below are sample videos available for download with no license restrictions." -- https://samplelib.com/sample-mp4.html
 	sha224sum -c input/check
 
-test: get_input_files mux_test dump_test
+test: mux_test dump_test
 	sha224sum -c output/check
 
 mux_test:
@@ -18,7 +18,7 @@ mux_test:
 	faketime -f '2020-12-01 00:00:00' ../../release/mp4-muxer aacvp9 -f output/aacvp9_test.mp4 --aac resources/aac.csv --vp9 resources/vp9.csv
 	faketime -f '2020-12-01 00:00:00' ../../release/mp4-muxer aacvp9_faststart -f output/aacvp9_faststart_test.mp4 --aac resources/aac.csv --vp9 resources/vp9.csv
 
-dump_test:
+dump_test: get_input_files
 	for f in input/*.mp4; do \
 		base=$$(basename $${f}); \
 		../../release/mp4-tool dump -f $${f} > output/$${base}.dump; \
