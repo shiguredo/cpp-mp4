@@ -17,8 +17,8 @@ In other languages, we won't be able to deal with them. Thank you for your under
 Apache License 2.0
 
 ```
-Copyright 2020, HARUYAMA Seigo (Original Author)
-Copyright 2020, Shiguredo Inc.
+Copyright 2020-2021, HARUYAMA Seigo (Original Author)
+Copyright 2020-2021, Shiguredo Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
