@@ -162,10 +162,7 @@ void FaststartWriter::copyMdatData() {
         fmt::format("FaststartWriter::copyMdatData(): cannot close the intermediate file: {}", m_mdat_path.string()));
   }
 
-  if (bool result = std::filesystem::remove(m_mdat_path); !result) {
-    throw std::runtime_error(
-        fmt::format("FaststartWriter::copyMdatData(): cannot remove the intermediate file: {}", m_mdat_path.string()));
-  }
+  deleteIntermediateFile();
 }
 
 void FaststartWriter::appendTrakAndUdtaBoxInfo(const std::vector<shiguredo::mp4::track::Track*>& tracks) {
@@ -193,6 +190,13 @@ void FaststartWriter::appendTrakAndUdtaBoxInfo(const std::vector<shiguredo::mp4:
           "FaststartWriter::appendTrakAndUdtaBoxInfo(): shrink moov size: prev_size={} size={}", prev_size, size));
     }
   } while (prev_size != size);
+}
+
+void FaststartWriter::deleteIntermediateFile() {
+  if (bool result = std::filesystem::remove(m_mdat_path); !result) {
+    throw std::runtime_error(fmt::format(
+        "FaststartWriter::deleteIntermediateFile(): cannot remove the intermediate file: {}", m_mdat_path.string()));
+  }
 }
 
 }  // namespace shiguredo::mp4::writer
