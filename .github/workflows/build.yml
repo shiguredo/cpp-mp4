@@ -23,7 +23,7 @@ jobs:
       matrix:
         os:
           - ubuntu-20.04_x86_64
-    name: Build hisui for ${{ matrix.os }}
+    name: Build cpp-mp4 for ${{ matrix.os }}
     runs-on: ubuntu-20.04
     steps:
       - name: Install packages
