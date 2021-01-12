@@ -1,0 +1,47 @@
+name: build-workflow
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - develop
+    paths-ignore:
+    - 'doc/**'
+    - '**.md'
+    - 'THANKS'
+    - 'LICENSE'
+    - 'NOTICE'
+
+jobs:
+  lint:
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-20.04_x86_64
+    name: Lint hisui for ${{ matrix.os }}
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Install packages
+        shell: bash
+        run: |
+          go get -u github.com/client9/misspell/cmd/misspell
+          sudo apt update
+          sudo apt install -yq shellcheck
+          sudo rm -rf /var/lib/apt/lists/*
+          pip3 install --user cpplint
+        env:
+            DEBIAN_FRONTEND: noninteractive
+      - uses: actions/checkout@v2
+      - name: Lint cpp-mp4
+        run: PATH=$PATH:~/.local/bin:~/go/bin ./lint.bash
+        timeout-minutes: 120
+      - name: Slack Notification
+        if: failure()
+        uses: rtCamp/action-slack-notify@v2.1.0
+        env:
+          SLACK_CHANNEL: hisui
+          SLACK_COLOR: danger
+          SLACK_TITLE: Failure lint
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
