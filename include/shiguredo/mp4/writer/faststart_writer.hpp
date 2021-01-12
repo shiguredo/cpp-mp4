@@ -43,6 +43,7 @@ class FaststartWriter : public Writer {
   void writeMdatHeader();
   void copyMdatData();
   void deleteIntermediateFile();
+  std::filesystem::path getIntermediateFilePath();
 
  private:
   std::ostream& m_os;

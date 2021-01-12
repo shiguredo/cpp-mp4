@@ -199,4 +199,9 @@ void FaststartWriter::deleteIntermediateFile() {
   }
 }
 
+std::filesystem::path FaststartWriter::getIntermediateFilePath() {
+  return m_mdat_path;
+}
+
 }  // namespace shiguredo::mp4::writer
+
