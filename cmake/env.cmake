@@ -1,0 +1,7 @@
+function(set_cache_string_from_env var default description)
+    if(DEFINED ENV{${var}})
+        set(${var} $ENV{${var}} CACHE STRING ${description})
+    else()
+        set(${var} ${default} CACHE STRING ${description})
+    endif()
+endfunction()

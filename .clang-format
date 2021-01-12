@@ -1,0 +1,6 @@
+---
+Language:       Cpp
+BasedOnStyle:   Chromium
+ReflowComments: false
+ColumnLimit: 120
+---
