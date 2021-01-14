@@ -77,6 +77,7 @@ void register_box_map(BoxMap* boxMap) {
   boxMap->addBoxDef(boost::factory<box::VisualSampleEntry*>(), BoxType("vp08"), {0});
   boxMap->addBoxDef(boost::factory<box::VisualSampleEntry*>(), BoxType("vp09"), {0});
   boxMap->addBoxDef(boost::factory<box::VisualSampleEntry*>(), BoxType("vp10"), {0});
+  boxMap->addBoxDef(boost::factory<box::VisualSampleEntry*>(), BoxType("av01"), {0});
   boxMap->addBoxDef(boost::factory<box::AudioSampleEntry*>(), BoxType("mp4a"), {0});
   boxMap->addBoxDef(boost::factory<box::AudioSampleEntry*>(), BoxType("enca"), {0});
   boxMap->addBoxDef(boost::factory<box::AudioSampleEntry*>(), BoxType("Opus"), {0});
