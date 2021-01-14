@@ -11,6 +11,8 @@
 
 ## develop
 
+- [FIX] MP4 ファイルの読み込み時に, ファイル終端を越える box のサイズを指定されたら例外を投げる
+    - @haruyama
 - [FIX] VPCodecConfiguration::getDataSize() のバグ修正
     - @haruyama
 
