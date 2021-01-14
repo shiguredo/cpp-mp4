@@ -11,6 +11,8 @@
 
 ## develop
 
+- [ADD] av01, av1C box のサポート
+    - @haruyama
 - [FIX] VPCodecConfiguration::getDataSize() のバグ修正
     - @haruyama
 
