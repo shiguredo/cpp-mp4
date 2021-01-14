@@ -53,7 +53,7 @@ std::uint64_t VPCodecConfiguration::writeData(std::ostream& os) const {
 
 std::uint64_t VPCodecConfiguration::getDataSize() const {
   if (m_version == 0) {
-    return 6;
+    return 10;
   }
   return 12 + std::size(m_codec_initialization_data);
 }

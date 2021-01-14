@@ -1982,6 +1982,20 @@ BoxTypesTestCase box_test_cases[] = {
      {0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0xff, 0xff, 0x00, 0x00, 0x00},
      "Version=1 Flags=0x000000 Profile=0 Level=0 BitDepth=8 ChromaSubSampling=0 VideoFullRangeFlag=0 "
      "ColourPrimaries=255 TransferCharacteristics=255 MatrixCoefficents=0 CodecInitializationData=[]"},
+    {"vpcC version: 0",
+     new shiguredo::mp4::box::VPCodecConfiguration({.version = 0,
+                                                    .profile = 0,
+                                                    .level = 0,
+                                                    .bit_depth = 8,
+                                                    .chroma_sub_sampling = 0,
+                                                    .video_full_range_flag = 0,
+                                                    .colour_primaries = 0xff,
+                                                    .transfer_characteristics = 0xff,
+                                                    .matrix_coefficents = 0}),
+     new shiguredo::mp4::box::VPCodecConfiguration(),
+     {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0xff, 0xff, 0x00},
+     "Version=0 Flags=0x000000 Profile=0 Level=0 BitDepth=8 ChromaSubSampling=0 VideoFullRangeFlag=0 "
+     "ColourPrimaries=255 TransferCharacteristics=255 MatrixCoefficents=0 CodecInitializationData=[]"},
     {
         "sdtp",
         new shiguredo::mp4::box::Sdtp({.samples =

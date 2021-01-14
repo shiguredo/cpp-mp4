@@ -11,6 +11,8 @@
 
 ## develop
 
+- [FIX] VPCodecConfiguration::getDataSize() のバグ修正
+    - @haruyama
 
 ## 2021.1
 
