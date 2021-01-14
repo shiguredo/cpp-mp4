@@ -83,6 +83,7 @@ void register_box_map(BoxMap* boxMap) {
   boxMap->addBoxDef(boost::factory<box::AudioSampleEntry*>(), BoxType("Opus"), {0});
   boxMap->addBoxDef(boost::factory<box::AVCDecoderConfiguration*>(), BoxType("avcC"), {0});
   boxMap->addBoxDef(boost::factory<box::VPCodecConfiguration*>(), BoxType("vpcC"), {1, 0});
+  boxMap->addBoxDef(boost::factory<box::AV1CodecConfiguration*>(), BoxType("av1C"), {});
   boxMap->addBoxDef(boost::factory<box::PixelAspectRatio*>(), BoxType("pasp"), {0});
 
   boxMap->addBoxDef(boost::factory<box::IlstMeta*>(), BoxType("----"), {});

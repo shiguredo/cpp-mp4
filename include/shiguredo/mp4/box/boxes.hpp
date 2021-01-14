@@ -1,5 +1,6 @@
 #pragma once
 
+#include "shiguredo/mp4/box/av1c.hpp"
 #include "shiguredo/mp4/box/avc.hpp"
 #include "shiguredo/mp4/box/btrt.hpp"
 #include "shiguredo/mp4/box/co64.hpp"

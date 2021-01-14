@@ -2146,6 +2146,22 @@ BoxTypesTestCase box_test_cases[] = {
         },
         "DataType=FLOAT64 DataLang=305419896 Data=[0x66, 0x6f, 0x6f]",
     },
+    {
+        "av1C",
+        new shiguredo::mp4::box::AV1CodecConfiguration(
+            {.seq_profile = 0,
+             .seq_level_idx_0 = 0,
+             .seq_tier_0 = 0,
+             .chroma_subsampling_x = 0,
+             .chroma_subsampling_y = 0,
+             .chroma_sample_position = 0,
+             .config_OBUs = {0x0a, 0x0b, 0x00, 0x00, 0x00, 0x04, 0x47, 0x7e, 0x1a, 0xff, 0xfc, 0xc0, 0x20}}),
+        new shiguredo::mp4::box::AV1CodecConfiguration(),
+        {0x81, 0x00, 0x00, 0x00, 0x0a, 0x0b, 0x00, 0x00, 0x00, 0x04, 0x47, 0x7e, 0x1a, 0xff, 0xfc, 0xc0, 0x20},
+        "Marker=1 Version=1 SeqProfile=0 SeqLevelIdx0=0 SeqTier0=0 HighBitdepth=false TwelveBit=false Monochrome=false "
+        "ChromaSubsamplingX=0 ChromaSubsamplingY=0 ChromaSamplePosition=0 InitialPresentationDelayPresent=false "
+        "ConfigOBUs=[0xa, 0xb, 0x0, 0x0, 0x0, 0x4, 0x47, 0x7e, 0x1a, 0xff, 0xfc, 0xc0, 0x20]",
+    },
 };
 
 BOOST_AUTO_TEST_CASE(box) {

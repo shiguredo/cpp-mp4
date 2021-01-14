@@ -166,6 +166,7 @@ target_sources(shiguredo-mp4
     src/box_header.cpp
     src/box_type.cpp
     src/box_types.cpp
+    src/box/av1c.cpp
     src/box/avc.cpp
     src/box/btrt.cpp
     src/box/co64.cpp
