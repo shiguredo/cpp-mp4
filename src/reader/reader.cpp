@@ -47,6 +47,12 @@ std::uint64_t SimpleReader::readBox(BoxInfo* parent) {
   BoxHeader* header = read_box_header(m_is);
   header->seekToData(m_is);
   std::stringstream ss;
+  const auto remaining_size = m_total_size - header->getOffset() - header->getHeaderSize();
+  if (header->getDataSize() > remaining_size) {
+    spdlog::trace("SimpleReader::readBox(): corrupt file? Header={}", header->toString());
+    throw std::runtime_error(fmt::format("corrupt file? box data size({}) is greater than remaining_size({})",
+                                         header->getDataSize(), remaining_size));
+  }
   std::copy_n(std::istreambuf_iterator<char>(m_is), header->getDataSize(), std::ostreambuf_iterator<char>(ss));
 
   spdlog::trace("SimpleReader::readBox(): Header={}", header->toString());
