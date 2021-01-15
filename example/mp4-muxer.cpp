@@ -157,17 +157,17 @@ int main(int argc, char** argv) {
     std::vector<Resource> av1_resources;
     load_resources_from_csv(&av1_resources, av1_filename);
     std::ofstream ofs(filename, std::ios_base::binary);
-    shiguredo::mp4::writer::SimpleWriter writer(ofs, {.mvhd_timescale = 1000, .duration = 16.0f});
+    shiguredo::mp4::writer::SimpleWriter writer(ofs, {.mvhd_timescale = 1000, .duration = 4.0f});
     writer.writeFtypBox();
     shiguredo::mp4::track::OpusTrack opus_trak(
-        {.pre_skip = 312, .duration = 16.0f, .track_id = writer.getAndUpdateNextTrackID(), .writer = &writer});
+        {.pre_skip = 312, .duration = 4.0f, .track_id = writer.getAndUpdateNextTrackID(), .writer = &writer});
     shiguredo::mp4::track::AV1Track av1_trak({.timescale = 16000,
-                                              .duration = 16.0f,
+                                              .duration = 4.0f,
                                               .track_id = writer.getAndUpdateNextTrackID(),
-                                              .width = 640,
-                                              .height = 240,
+                                              .width = 240,
+                                              .height = 160,
                                               .writer = &writer});
-    for (size_t s = 0; s < 16; ++s) {
+    for (size_t s = 0; s < 4; ++s) {
       // chunk length: 1000ms
       for (size_t j = 0; j < 50; ++j) {
         auto i = s * 50 + j;

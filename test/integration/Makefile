@@ -17,6 +17,7 @@ mux_test:
 	faketime -f '2020-12-01 00:00:00' ../../release/mp4-muxer mp3vp8 -f output/mp3vp8_test.mp4 --mp3 resources/mp3.csv --vp8 resources/vp8.csv
 	faketime -f '2020-12-01 00:00:00' ../../release/mp4-muxer aacvp9 -f output/aacvp9_test.mp4 --aac resources/aac.csv --vp9 resources/vp9.csv
 	faketime -f '2020-12-01 00:00:00' ../../release/mp4-muxer aacvp9_faststart -f output/aacvp9_faststart_test.mp4 --aac resources/aac.csv --vp9 resources/vp9.csv
+	faketime -f '2020-12-01 00:00:00' ../../release/mp4-muxer opusav1 -f output/opusav1_test.mp4 --opus resources/opus.csv --av1 resources/av1.csv
 
 dump_test: get_input_files
 	for f in input/*.mp4; do \
