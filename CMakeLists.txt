@@ -239,6 +239,7 @@ target_sources(shiguredo-mp4
     src/time/time.cpp
     src/track/track.cpp
     src/track/aac.cpp
+    src/track/av1.cpp
     src/track/mp3.cpp
     src/track/opus.cpp
     src/track/soun.cpp
