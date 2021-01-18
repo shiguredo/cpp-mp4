@@ -96,7 +96,7 @@ int main(int argc, char** argv) {
   spdlog::set_level(log_level);
   spdlog::set_default_logger(spdlog::stderr_color_mt("mp4-muxer"));
 
-  auto subcommands = app.get_subcommands();
+  const auto subcommands = app.get_subcommands();
 
   if (subcommands[0] == csv) {
     std::vector<Resource> resources;
@@ -109,10 +109,11 @@ int main(int argc, char** argv) {
     std::vector<Resource> resources;
     load_resources_from_csv(&resources, opus_filename);
     std::ofstream ofs(filename, std::ios_base::binary);
-    shiguredo::mp4::writer::SimpleWriter writer(ofs, {.mvhd_timescale = 1000, .duration = 16.0f});
+    const float duration = 16.0f;
+    shiguredo::mp4::writer::SimpleWriter writer(ofs, {.mvhd_timescale = 1000, .duration = duration});
     writer.writeFtypBox();
     shiguredo::mp4::track::OpusTrack opus_trak(
-        {.pre_skip = 312, .duration = 16.0f, .track_id = writer.getAndUpdateNextTrackID(), .writer = &writer});
+        {.pre_skip = 312, .duration = duration, .track_id = writer.getAndUpdateNextTrackID(), .writer = &writer});
     for (size_t i = 0; i < 800; ++i) {
       opus_trak.addMdatData(resources[i].timestamp, resources[i].data, resources[i].is_key);
     }
@@ -125,12 +126,13 @@ int main(int argc, char** argv) {
     std::vector<Resource> vp9_resources;
     load_resources_from_csv(&vp9_resources, vp9_filename);
     std::ofstream ofs(filename, std::ios_base::binary);
-    shiguredo::mp4::writer::SimpleWriter writer(ofs, {.mvhd_timescale = 1000, .duration = 16.0f});
+    const float duration = 16.0f;
+    shiguredo::mp4::writer::SimpleWriter writer(ofs, {.mvhd_timescale = 1000, .duration = duration});
     writer.writeFtypBox();
     shiguredo::mp4::track::OpusTrack opus_trak(
-        {.pre_skip = 312, .duration = 16.0f, .track_id = writer.getAndUpdateNextTrackID(), .writer = &writer});
+        {.pre_skip = 312, .duration = duration, .track_id = writer.getAndUpdateNextTrackID(), .writer = &writer});
     shiguredo::mp4::track::VPXTrack vpx_trak({.timescale = 16000,
-                                              .duration = 16.0f,
+                                              .duration = duration,
                                               .track_id = writer.getAndUpdateNextTrackID(),
                                               .width = 640,
                                               .height = 240,
@@ -157,12 +159,13 @@ int main(int argc, char** argv) {
     std::vector<Resource> av1_resources;
     load_resources_from_csv(&av1_resources, av1_filename);
     std::ofstream ofs(filename, std::ios_base::binary);
-    shiguredo::mp4::writer::SimpleWriter writer(ofs, {.mvhd_timescale = 1000, .duration = 4.0f});
+    const float duration = 4.0f;
+    shiguredo::mp4::writer::SimpleWriter writer(ofs, {.mvhd_timescale = 1000, .duration = duration});
     writer.writeFtypBox();
     shiguredo::mp4::track::OpusTrack opus_trak(
-        {.pre_skip = 312, .duration = 4.0f, .track_id = writer.getAndUpdateNextTrackID(), .writer = &writer});
+        {.pre_skip = 312, .duration = duration, .track_id = writer.getAndUpdateNextTrackID(), .writer = &writer});
     shiguredo::mp4::track::AV1Track av1_trak({.timescale = 16000,
-                                              .duration = 4.0f,
+                                              .duration = duration,
                                               .track_id = writer.getAndUpdateNextTrackID(),
                                               .width = 240,
                                               .height = 160,
@@ -189,10 +192,11 @@ int main(int argc, char** argv) {
     std::vector<Resource> vp8_resources;
     load_resources_from_csv(&vp8_resources, vp8_filename);
     std::ofstream ofs(filename, std::ios_base::binary);
-    shiguredo::mp4::writer::SimpleWriter writer(ofs, {.mvhd_timescale = 1000, .duration = 15.36f});
+    const float duration = 15.36f;
+    shiguredo::mp4::writer::SimpleWriter writer(ofs, {.mvhd_timescale = 1000, .duration = duration});
     writer.writeFtypBox();
     shiguredo::mp4::track::MP3Track mp3_trak({.timescale = 48000,
-                                              .duration = 15.36f,
+                                              .duration = duration,
                                               .track_id = writer.getAndUpdateNextTrackID(),
                                               .buffer_size_db = 768,
                                               .max_bitrate = 256000,
@@ -200,7 +204,7 @@ int main(int argc, char** argv) {
                                               .writer = &writer});
     shiguredo::mp4::track::VPXTrack vpx_trak({.codec = shiguredo::mp4::track::VPXCodec::VP8,
                                               .timescale = 16000,
-                                              .duration = 15.36f,
+                                              .duration = duration,
                                               .track_id = writer.getAndUpdateNextTrackID(),
                                               .width = 640,
                                               .height = 240,
@@ -227,17 +231,18 @@ int main(int argc, char** argv) {
     std::vector<Resource> vp9_resources;
     load_resources_from_csv(&vp9_resources, vp9_filename);
     std::ofstream ofs(filename, std::ios_base::binary);
-    shiguredo::mp4::writer::SimpleWriter writer(ofs, {.mvhd_timescale = 1000, .duration = 15.36f});
+    const float duration = 15.36f;
+    shiguredo::mp4::writer::SimpleWriter writer(ofs, {.mvhd_timescale = 1000, .duration = duration});
     writer.writeFtypBox();
     shiguredo::mp4::track::AACTrack aac_trak({.timescale = 48000,
-                                              .duration = 15.36f,
+                                              .duration = duration,
                                               .track_id = writer.getAndUpdateNextTrackID(),
                                               .buffer_size_db = 0,
                                               .max_bitrate = 64000,
                                               .avg_bitrate = 64000,
                                               .writer = &writer});
     shiguredo::mp4::track::VPXTrack vpx_trak({.timescale = 16000,
-                                              .duration = 15.36f,
+                                              .duration = duration,
                                               .track_id = writer.getAndUpdateNextTrackID(),
                                               .width = 640,
                                               .height = 240,
@@ -264,12 +269,13 @@ int main(int argc, char** argv) {
     std::vector<Resource> vp9_resources;
     load_resources_from_csv(&vp9_resources, vp9_filename);
     std::ofstream ofs(filename, std::ios_base::binary);
-    shiguredo::mp4::writer::FaststartWriter writer(ofs, {.mvhd_timescale = 1000, .duration = 16.0f});
+    const float duration = 16.0f;
+    shiguredo::mp4::writer::FaststartWriter writer(ofs, {.mvhd_timescale = 1000, .duration = duration});
     writer.writeFtypBox();
     shiguredo::mp4::track::OpusTrack opus_trak(
-        {.pre_skip = 312, .duration = 16.0f, .track_id = writer.getAndUpdateNextTrackID(), .writer = &writer});
+        {.pre_skip = 312, .duration = duration, .track_id = writer.getAndUpdateNextTrackID(), .writer = &writer});
     shiguredo::mp4::track::VPXTrack vpx_trak({.timescale = 16000,
-                                              .duration = 16.0f,
+                                              .duration = duration,
                                               .track_id = writer.getAndUpdateNextTrackID(),
                                               .width = 640,
                                               .height = 240,
@@ -298,17 +304,18 @@ int main(int argc, char** argv) {
     std::vector<Resource> vp9_resources;
     load_resources_from_csv(&vp9_resources, vp9_filename);
     std::ofstream ofs(filename, std::ios_base::binary);
-    shiguredo::mp4::writer::FaststartWriter writer(ofs, {.mvhd_timescale = 1000, .duration = 15.36f});
+    const float duration = 15.36f;
+    shiguredo::mp4::writer::FaststartWriter writer(ofs, {.mvhd_timescale = 1000, .duration = duration});
     writer.writeFtypBox();
     shiguredo::mp4::track::AACTrack aac_trak({.timescale = 48000,
-                                              .duration = 15.36f,
+                                              .duration = duration,
                                               .track_id = writer.getAndUpdateNextTrackID(),
                                               .buffer_size_db = 0,
                                               .max_bitrate = 64000,
                                               .avg_bitrate = 64000,
                                               .writer = &writer});
     shiguredo::mp4::track::VPXTrack vpx_trak({.timescale = 16000,
-                                              .duration = 15.36f,
+                                              .duration = duration,
                                               .track_id = writer.getAndUpdateNextTrackID(),
                                               .width = 640,
                                               .height = 240,
