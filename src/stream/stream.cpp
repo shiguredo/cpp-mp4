@@ -7,7 +7,7 @@
 namespace shiguredo::mp4::stream {
 
 std::streamoff get_istream_offset_to_end(std::istream& is) {
-  auto offset = is.tellg();
+  const auto offset = is.tellg();
   if (!is.good()) {
     throw std::runtime_error(
         fmt::format("stream::get_istream_offset_to_end(): istream::tellg() failed: rdstate={}", is.rdstate()));
@@ -17,7 +17,7 @@ std::streamoff get_istream_offset_to_end(std::istream& is) {
     throw std::runtime_error(
         fmt::format("stream::get_istream_offset_to_end(): istream::seekg() failed: rdstate={}", is.rdstate()));
   }
-  auto end_offset = is.tellg();
+  const auto end_offset = is.tellg();
   if (!is.good()) {
     throw std::runtime_error(
         fmt::format("stream::get_istream_offset_to_end(): istream::tellg() failed: rdstate={}", is.rdstate()));

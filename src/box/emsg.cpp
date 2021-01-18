@@ -78,8 +78,8 @@ std::uint64_t Emsg::readData(std::istream& is) {
   bitio::Reader reader(is);
   std::uint64_t rbits = readVersionAndFlag(&reader);
   if (m_version == 0) {
-    auto offset_to_end = static_cast<std::uint64_t>(shiguredo::mp4::stream::get_istream_offset_to_end(is));
-    auto scheme_uri_rbits = bitio::read_string(&reader, &m_scheme_uri, offset_to_end * 8);
+    const auto offset_to_end = static_cast<std::uint64_t>(shiguredo::mp4::stream::get_istream_offset_to_end(is));
+    const auto scheme_uri_rbits = bitio::read_string(&reader, &m_scheme_uri, offset_to_end * 8);
     rbits += scheme_uri_rbits;
     rbits += bitio::read_string(&reader, &m_value, offset_to_end * 8 - scheme_uri_rbits);
     rbits += bitio::read_uint<std::uint32_t>(&reader, &m_timescale);
@@ -91,12 +91,12 @@ std::uint64_t Emsg::readData(std::istream& is) {
     rbits += bitio::read_uint<std::uint64_t>(&reader, &m_presentation_time);
     rbits += bitio::read_uint<std::uint32_t>(&reader, &m_event_duration);
     rbits += bitio::read_uint<std::uint32_t>(&reader, &m_id);
-    auto offset_to_end = static_cast<std::uint64_t>(shiguredo::mp4::stream::get_istream_offset_to_end(is));
-    auto scheme_uri_rbits = bitio::read_string(&reader, &m_scheme_uri, offset_to_end * 8);
+    const auto offset_to_end = static_cast<std::uint64_t>(shiguredo::mp4::stream::get_istream_offset_to_end(is));
+    const auto scheme_uri_rbits = bitio::read_string(&reader, &m_scheme_uri, offset_to_end * 8);
     rbits += scheme_uri_rbits;
     rbits += bitio::read_string(&reader, &m_value, offset_to_end * 8 - scheme_uri_rbits);
   }
-  size_t offset_to_end = static_cast<std::size_t>(shiguredo::mp4::stream::get_istream_offset_to_end(is));
+  const size_t offset_to_end = static_cast<std::size_t>(shiguredo::mp4::stream::get_istream_offset_to_end(is));
   rbits += bitio::read_vector_uint<std::uint8_t>(&reader, offset_to_end, &m_message_data);
   return rbits;
 }

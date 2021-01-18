@@ -68,7 +68,7 @@ std::uint64_t Styp::readData(std::istream& is) {
   bitio::Reader reader(is);
   auto rbits = bitio::read_array_uint8_4(&reader, &m_major_brand);
   rbits += bitio::read_uint<std::uint32_t>(&reader, &m_minor_version);
-  size_t offset_to_end = static_cast<std::size_t>(shiguredo::mp4::stream::get_istream_offset_to_end(is));
+  const std::size_t offset_to_end = static_cast<std::size_t>(shiguredo::mp4::stream::get_istream_offset_to_end(is));
   if (offset_to_end % 4 != 0) {
     throw std::runtime_error("Styp::readData(): box has invalid length");
   }
