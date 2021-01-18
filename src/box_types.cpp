@@ -77,11 +77,13 @@ void register_box_map(BoxMap* boxMap) {
   boxMap->addBoxDef(boost::factory<box::VisualSampleEntry*>(), BoxType("vp08"), {0});
   boxMap->addBoxDef(boost::factory<box::VisualSampleEntry*>(), BoxType("vp09"), {0});
   boxMap->addBoxDef(boost::factory<box::VisualSampleEntry*>(), BoxType("vp10"), {0});
+  boxMap->addBoxDef(boost::factory<box::VisualSampleEntry*>(), BoxType("av01"), {0});
   boxMap->addBoxDef(boost::factory<box::AudioSampleEntry*>(), BoxType("mp4a"), {0});
   boxMap->addBoxDef(boost::factory<box::AudioSampleEntry*>(), BoxType("enca"), {0});
   boxMap->addBoxDef(boost::factory<box::AudioSampleEntry*>(), BoxType("Opus"), {0});
   boxMap->addBoxDef(boost::factory<box::AVCDecoderConfiguration*>(), BoxType("avcC"), {0});
   boxMap->addBoxDef(boost::factory<box::VPCodecConfiguration*>(), BoxType("vpcC"), {1, 0});
+  boxMap->addBoxDef(boost::factory<box::AV1CodecConfiguration*>(), BoxType("av1C"), {});
   boxMap->addBoxDef(boost::factory<box::PixelAspectRatio*>(), BoxType("pasp"), {0});
 
   boxMap->addBoxDef(boost::factory<box::IlstMeta*>(), BoxType("----"), {});

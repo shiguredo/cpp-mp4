@@ -17,6 +17,7 @@
 #include <CLI/Formatter.hpp>
 
 #include "shiguredo/mp4/track/aac.hpp"
+#include "shiguredo/mp4/track/av1.hpp"
 #include "shiguredo/mp4/track/mp3.hpp"
 #include "shiguredo/mp4/track/opus.hpp"
 #include "shiguredo/mp4/track/vpx.hpp"
@@ -49,6 +50,7 @@ int main(int argc, char** argv) {
   std::string opus_filename;
   std::string vp9_filename;
   std::string vp8_filename;
+  std::string av1_filename;
   std::string mp3_filename;
   std::string aac_filename;
 
@@ -68,6 +70,11 @@ int main(int argc, char** argv) {
   opusvp9_faststart->add_option("-f,--file", filename, "filename");
   opusvp9_faststart->add_option("--opus", opus_filename, "opus resource filename");
   opusvp9_faststart->add_option("--vp9", vp9_filename, "vp9 resource filename");
+
+  auto opusav1 = app.add_subcommand("opusav1");
+  opusav1->add_option("-f,--file", filename, "filename");
+  opusav1->add_option("--opus", opus_filename, "opus resource filename");
+  opusav1->add_option("--av1", av1_filename, "av1 resource filename");
 
   auto mp3vp8 = app.add_subcommand("mp3vp8");
   mp3vp8->add_option("-f,--file", filename, "filename");
@@ -142,6 +149,38 @@ int main(int argc, char** argv) {
       vpx_trak.terminateCurrentChunk();
     }
     writer.appendTrakAndUdtaBoxInfo({&opus_trak, &vpx_trak});
+    writer.writeFreeBoxAndMdatHeader();
+    writer.writeMoovBox();
+  } else if (subcommands[0] == opusav1) {
+    std::vector<Resource> opus_resources;
+    load_resources_from_csv(&opus_resources, opus_filename);
+    std::vector<Resource> av1_resources;
+    load_resources_from_csv(&av1_resources, av1_filename);
+    std::ofstream ofs(filename, std::ios_base::binary);
+    shiguredo::mp4::writer::SimpleWriter writer(ofs, {.mvhd_timescale = 1000, .duration = 4.0f});
+    writer.writeFtypBox();
+    shiguredo::mp4::track::OpusTrack opus_trak(
+        {.pre_skip = 312, .duration = 4.0f, .track_id = writer.getAndUpdateNextTrackID(), .writer = &writer});
+    shiguredo::mp4::track::AV1Track av1_trak({.timescale = 16000,
+                                              .duration = 4.0f,
+                                              .track_id = writer.getAndUpdateNextTrackID(),
+                                              .width = 240,
+                                              .height = 160,
+                                              .writer = &writer});
+    for (size_t s = 0; s < 4; ++s) {
+      // chunk length: 1000ms
+      for (size_t j = 0; j < 50; ++j) {
+        auto i = s * 50 + j;
+        opus_trak.addMdatData(opus_resources[i].timestamp, opus_resources[i].data, opus_resources[i].is_key);
+      }
+      opus_trak.terminateCurrentChunk();
+      for (size_t j = 0; j < 25; ++j) {
+        auto i = s * 25 + j;
+        av1_trak.addMdatData(av1_resources[i].timestamp, av1_resources[i].data, av1_resources[i].is_key);
+      }
+      av1_trak.terminateCurrentChunk();
+    }
+    writer.appendTrakAndUdtaBoxInfo({&opus_trak, &av1_trak});
     writer.writeFreeBoxAndMdatHeader();
     writer.writeMoovBox();
   } else if (subcommands[0] == mp3vp8) {
