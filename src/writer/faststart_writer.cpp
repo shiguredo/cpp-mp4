@@ -53,7 +53,7 @@ void FaststartWriter::recreateMoovBoxInfo() {
   }
 
   m_moov_box_info = new BoxInfo({.box = new box::Moov()});
-  std::uint64_t mvhd_duration = static_cast<std::uint64_t>(static_cast<float>(m_mvhd_timescale) * m_duration);
+  const std::uint64_t mvhd_duration = static_cast<std::uint64_t>(static_cast<float>(m_mvhd_timescale) * m_duration);
   m_mvhd_box = new box::Mvhd({.creation_time = m_time_from_epoch,
                               .modification_time = m_time_from_epoch,
                               .timescale = m_mvhd_timescale,
@@ -73,13 +73,13 @@ void FaststartWriter::writeFtypBox() {
 }
 
 void FaststartWriter::writeMdatHeader() {
-  std::uint64_t offset = getFtypSize() + getMoovSize();
+  const std::uint64_t offset = getFtypSize() + getMoovSize();
   m_os.seekp(static_cast<std::streamoff>(offset), std::ios_base::beg);
   if (!m_os.good()) {
     throw std::runtime_error(
         fmt::format("FaststartWriter::writeMdatHeader(): ostream::seekp() failed: rdstate={}", m_os.rdstate()));
   }
-  auto mdat_header_size = getMdatHeaderSize();
+  const auto mdat_header_size = getMdatHeaderSize();
   BoxHeader mdat({.offset = offset,
                   .size = m_mdat_data_size + mdat_header_size,
                   .header_size = mdat_header_size,
@@ -92,7 +92,7 @@ void FaststartWriter::writeMdatHeader() {
 }
 
 void FaststartWriter::addMdatData(const std::uint8_t* data, const std::size_t data_size) {
-  if (auto ret = fwrite(data, 1, data_size, m_mdat_fd); ret != data_size) {
+  if (const auto ret = fwrite(data, 1, data_size, m_mdat_fd); ret != data_size) {
     throw std::runtime_error(
         fmt::format("FaststartWriter::addMdatData(): fwrite() failed: data_size={} ret={}", data_size, ret));
   }
@@ -104,7 +104,7 @@ void FaststartWriter::setOffsetAndSize() {
 }
 
 std::uint64_t FaststartWriter::tellCurrentMdatOffset() {
-  auto offset = ::ftell(m_mdat_fd);
+  const auto offset = ::ftell(m_mdat_fd);
   if (offset == -1) {
     throw std::runtime_error("FaststartWriter::tellCurrentMdatOffset(): ftell() failed");
   }
@@ -143,7 +143,7 @@ std::uint64_t FaststartWriter::getMdatHeaderSize() const {
 }
 
 void FaststartWriter::copyMdatData() {
-  if (auto ret = std::fseek(m_mdat_fd, 0, SEEK_SET); ret == -1) {
+  if (const auto ret = std::fseek(m_mdat_fd, 0, SEEK_SET); ret == -1) {
     throw std::runtime_error("fseek failed");
   }
 
@@ -193,7 +193,7 @@ void FaststartWriter::appendTrakAndUdtaBoxInfo(const std::vector<shiguredo::mp4:
 }
 
 void FaststartWriter::deleteIntermediateFile() {
-  if (bool result = std::filesystem::remove(m_mdat_path); !result) {
+  if (const bool result = std::filesystem::remove(m_mdat_path); !result) {
     throw std::runtime_error(fmt::format(
         "FaststartWriter::deleteIntermediateFile(): cannot remove the intermediate file: {}", m_mdat_path.string()));
   }

@@ -66,7 +66,7 @@ std::uint64_t SimpleReader::readBox(BoxInfo* parent) {
     m_boxes.push_back(info);
   }
 
-  auto rbits = box->readData(ss);
+  const auto rbits = box->readData(ss);
   std::uint64_t rbytes = rbits / 8;
   m_is.seekg(static_cast<std::streamoff>(header->getOffset() + header->getHeaderSize() + rbytes));
   if (!m_is.good()) {

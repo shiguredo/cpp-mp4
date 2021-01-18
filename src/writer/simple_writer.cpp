@@ -28,7 +28,7 @@ SimpleWriter::SimpleWriter(std::ostream& t_os, const SimpleWriterParameters& par
   m_time_from_epoch = time::convert_to_epoch_19040101(
       static_cast<std::uint64_t>(duration_cast<std::chrono::seconds>(p.time_since_epoch()).count()));
 
-  std::uint64_t mvhd_duration = static_cast<std::uint64_t>(static_cast<float>(m_mvhd_timescale) * m_duration);
+  const std::uint64_t mvhd_duration = static_cast<std::uint64_t>(static_cast<float>(m_mvhd_timescale) * m_duration);
 
   m_moov_box_info = new BoxInfo({.box = new box::Moov()});
   m_mvhd_box = new box::Mvhd({.creation_time = m_time_from_epoch,
@@ -101,12 +101,12 @@ void SimpleWriter::addMdatData(const std::uint8_t* data, const std::size_t data_
 }
 
 void SimpleWriter::setOffsetAndSize() {
-  std::uint64_t offset = m_ftyp_size + Constants::LARGE_HEADER_SIZE + m_mdat_data_size;
+  const std::uint64_t offset = m_ftyp_size + Constants::LARGE_HEADER_SIZE + m_mdat_data_size;
   m_moov_box_info->adjustOffsetAndSize(offset);
 }
 
 std::uint64_t SimpleWriter::tellCurrentMdatOffset() {
-  auto offset = m_os.tellp();
+  const auto offset = m_os.tellp();
   if (!m_os.good()) {
     throw std::runtime_error(
         fmt::format("SimpleWriter::tellCurrentMdatOffset(): ostream::tellp() failed: rdstate={}", m_os.rdstate()));
