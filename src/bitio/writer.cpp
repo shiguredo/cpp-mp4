@@ -28,7 +28,7 @@ std::streamsize Writer::write(const std::vector<std::uint8_t>& p) {
   return size;
 }
 
-void Writer::writeBits(const std::vector<std::uint8_t>& data, std::uint64_t width) {
+void Writer::writeBits(const std::vector<std::uint8_t>& data, const std::uint64_t width) {
   auto length = std::size(data) * 8;
   auto offset = length - width;
   for (auto i = offset; i < length; ++i) {
@@ -37,7 +37,7 @@ void Writer::writeBits(const std::vector<std::uint8_t>& data, std::uint64_t widt
   }
 }
 
-void Writer::writeBit(bool bit) {
+void Writer::writeBit(const bool bit) {
   if (bit) {
     m_octet |= (0x1 << (7 - m_width));
   }

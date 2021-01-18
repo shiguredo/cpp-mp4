@@ -11,14 +11,14 @@ class Reader {
   explicit Reader(std::istream& t_is);
 
   std::streamsize read(std::vector<std::uint8_t>* p);
-  void readBits(std::vector<std::uint8_t>* data, std::uint64_t size);
+  void readBits(std::vector<std::uint8_t>* data, const std::uint64_t size);
   bool readBit();
-  std::uint64_t seek(std::uint64_t offset, std::ios_base::seekdir way);
+  std::uint64_t seek(const std::uint64_t offset, const std::ios_base::seekdir way);
 
-  void setOctet(std::uint8_t octet);
+  void setOctet(const std::uint8_t octet);
   std::uint8_t getOctet() const;
 
-  void setWidth(std::uint8_t width);
+  void setWidth(const std::uint8_t width);
 
   std::istream& getIStream() const;
 

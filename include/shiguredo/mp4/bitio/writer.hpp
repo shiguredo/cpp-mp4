@@ -11,8 +11,8 @@ class Writer {
   explicit Writer(std::ostream& t_os);
 
   std::streamsize write(const std::vector<std::uint8_t>& p);
-  void writeBits(const std::vector<std::uint8_t>& data, std::uint64_t width);
-  void writeBit(bool bit);
+  void writeBits(const std::vector<std::uint8_t>& data, const std::uint64_t width);
+  void writeBit(const bool bit);
 
  private:
   std::ostream& m_os;

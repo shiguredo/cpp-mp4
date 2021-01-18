@@ -29,7 +29,7 @@ std::uint64_t write_string(Writer* writer, const std::string& str) {
   return wbits;
 }
 
-std::uint64_t read_string(Reader* reader, std::string* str, std::uint64_t max_rbits) {
+std::uint64_t read_string(Reader* reader, std::string* str, const std::uint64_t max_rbits) {
   std::uint64_t rbits = 0;
   str->clear();
   while (rbits < max_rbits) {
@@ -61,7 +61,7 @@ std::uint64_t write_pascal_string(Writer* writer, const std::string& str) {
   return wbits;
 }
 
-std::uint64_t read_pascal_string(Reader* reader, std::string* str, std::uint64_t max_rbits) {
+std::uint64_t read_pascal_string(Reader* reader, std::string* str, const std::uint64_t max_rbits) {
   if (max_rbits < 2 * 8) {
     return read_string(reader, str, max_rbits);
   }
