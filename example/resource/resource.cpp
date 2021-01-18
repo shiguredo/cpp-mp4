@@ -27,11 +27,11 @@ void load_resources_from_csv(std::vector<Resource>* resources, const std::string
   resources->clear();
   rapidcsv::Document doc(filename, rapidcsv::LabelParams(-1, -1));
   resources->reserve(doc.GetRowCount());
-  for (size_t i = 0; i < doc.GetRowCount(); ++i) {
-    std::uint64_t timestamp = doc.GetCell<std::uint64_t>(0, i);
-    std::size_t data_length = doc.GetCell<std::uint64_t>(1, i);
-    std::string hex_data = doc.GetCell<std::string>(2, i);
-    std::vector<std::uint8_t> data = hex2bin(hex_data);
+  for (std::size_t i = 0; i < doc.GetRowCount(); ++i) {
+    const std::uint64_t timestamp = doc.GetCell<std::uint64_t>(0, i);
+    const std::size_t data_length = doc.GetCell<std::uint64_t>(1, i);
+    const std::string hex_data = doc.GetCell<std::string>(2, i);
+    const std::vector<std::uint8_t> data = hex2bin(hex_data);
     if (data_length != std::size(data)) {
       throw new std::runtime_error(fmt::format("load_resources_from_csv(): data is invalid: timestamp={}", timestamp));
     }
