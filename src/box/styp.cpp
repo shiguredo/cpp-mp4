@@ -73,7 +73,7 @@ std::uint64_t Styp::readData(std::istream& is) {
     throw std::runtime_error("Styp::readData(): box has invalid length");
   }
   m_compatible_brands.resize(offset_to_end / 4);
-  for (size_t i = 0; i * 4 < offset_to_end; ++i) {
+  for (std::size_t i = 0; i * 4 < offset_to_end; ++i) {
     Brand brand;
     rbits += bitio::read_array_uint8_4(&reader, &brand);
     m_compatible_brands[i] = brand;

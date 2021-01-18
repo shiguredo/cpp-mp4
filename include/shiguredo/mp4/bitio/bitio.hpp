@@ -114,8 +114,8 @@ std::uint64_t read_pascal_string(Reader*, std::string*, const std::uint64_t);
 std::uint64_t write_bool(Writer*, const bool);
 std::uint64_t read_bool(Reader*, bool*);
 
-std::uint64_t write_array_uint8_4(Writer*, const std::array<uint8_t, 4>&);
-std::uint64_t read_array_uint8_4(Reader*, std::array<uint8_t, 4>*);
+std::uint64_t write_array_uint8_4(Writer*, const std::array<std::uint8_t, 4>&);
+std::uint64_t read_array_uint8_4(Reader*, std::array<std::uint8_t, 4>*);
 
 template <typename T>
 std::uint64_t write_vector_uint(Writer* writer, const std::vector<T>& v) {

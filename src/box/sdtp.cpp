@@ -54,7 +54,7 @@ std::uint64_t Sdtp::readData(std::istream& is) {
   std::uint64_t rbits = readVersionAndFlag(&reader);
   const std::size_t offset_to_end = static_cast<std::size_t>(shiguredo::mp4::stream::get_istream_offset_to_end(is));
   m_samples.resize(offset_to_end);
-  for (size_t i = 0; i < offset_to_end; ++i) {
+  for (std::size_t i = 0; i < offset_to_end; ++i) {
     rbits += m_samples[i].readData(&reader);
   }
   return rbits;

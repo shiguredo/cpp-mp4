@@ -88,7 +88,7 @@ std::uint64_t BoxHeader::write(std::ostream& os) {
     data[3] = 0;
   } else if (m_size <= std::numeric_limits<std::uint32_t>::max() && m_header_size != Constants::LARGE_HEADER_SIZE) {
     data.resize(Constants::SMALL_HEADER_SIZE);
-    auto a = endian::uint32_to_be(static_cast<uint32_t>(m_size));
+    auto a = endian::uint32_to_be(static_cast<std::uint32_t>(m_size));
     std::copy(std::begin(a), std::end(a), std::begin(data));
   } else {
     data.resize(Constants::LARGE_HEADER_SIZE);

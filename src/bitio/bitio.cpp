@@ -110,7 +110,7 @@ std::uint64_t read_bool(Reader* reader, bool* b) {
   return 1;
 }
 
-std::uint64_t write_array_uint8_4(Writer* writer, const std::array<uint8_t, 4>& v) {
+std::uint64_t write_array_uint8_4(Writer* writer, const std::array<std::uint8_t, 4>& v) {
   std::uint64_t wbits = 0;
   for (const auto c : v) {
     wbits += write_uint<std::uint8_t>(writer, c);
@@ -118,7 +118,7 @@ std::uint64_t write_array_uint8_4(Writer* writer, const std::array<uint8_t, 4>& 
   return wbits;
 }
 
-std::uint64_t read_array_uint8_4(Reader* reader, std::array<uint8_t, 4>* v) {
+std::uint64_t read_array_uint8_4(Reader* reader, std::array<std::uint8_t, 4>* v) {
   for (std::size_t i = 0; i < 4; ++i) {
     read_uint<std::uint8_t>(reader, &((*v)[i]));
   }

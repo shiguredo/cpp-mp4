@@ -96,7 +96,7 @@ std::uint64_t Emsg::readData(std::istream& is) {
     rbits += scheme_uri_rbits;
     rbits += bitio::read_string(&reader, &m_value, offset_to_end * 8 - scheme_uri_rbits);
   }
-  const size_t offset_to_end = static_cast<std::size_t>(shiguredo::mp4::stream::get_istream_offset_to_end(is));
+  const std::size_t offset_to_end = static_cast<std::size_t>(shiguredo::mp4::stream::get_istream_offset_to_end(is));
   rbits += bitio::read_vector_uint<std::uint8_t>(&reader, offset_to_end, &m_message_data);
   return rbits;
 }

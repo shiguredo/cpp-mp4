@@ -13,7 +13,7 @@
 std::vector<std::uint8_t> hex2bin(const std::string& hex_data) {
   std::vector<std::uint8_t> ret;
   ret.resize(std::size(hex_data) / 2);
-  for (size_t i = 0; i < std::size(ret); ++i) {
+  for (std::size_t i = 0; i < std::size(ret); ++i) {
     std::int16_t tmp;
     if (std::istringstream(hex_data.substr(i * 2, 2)) >> std::hex >> tmp) {
       ret[i] = static_cast<std::uint8_t>(tmp);

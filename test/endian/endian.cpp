@@ -10,7 +10,7 @@ BOOST_AUTO_TEST_SUITE(endian)
 
 struct Uint32TestCase {
   std::uint32_t number;
-  std::array<uint8_t, 4> array;
+  std::array<std::uint8_t, 4> array;
 };
 
 Uint32TestCase uint32_test_cases[] = {
@@ -34,7 +34,7 @@ BOOST_AUTO_TEST_CASE(uint32) {
 
 struct Uint64TestCase {
   std::uint64_t number;
-  std::array<uint8_t, 8> array;
+  std::array<std::uint8_t, 8> array;
 };
 
 Uint64TestCase uint64_test_cases[] = {

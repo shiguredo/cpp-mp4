@@ -46,6 +46,6 @@ class Mdhd : public FullBox {
 };
 
 std::uint16_t encode_language(const std::array<std::uint8_t, 3>&);
-std::array<std::uint8_t, 3> decode_language(const uint16_t enc);
+std::array<std::uint8_t, 3> decode_language(const std::uint16_t enc);
 
 }  // namespace shiguredo::mp4::box
