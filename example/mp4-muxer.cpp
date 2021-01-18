@@ -114,7 +114,7 @@ int main(int argc, char** argv) {
     writer.writeFtypBox();
     shiguredo::mp4::track::OpusTrack opus_trak(
         {.pre_skip = 312, .duration = duration, .track_id = writer.getAndUpdateNextTrackID(), .writer = &writer});
-    for (size_t i = 0; i < 800; ++i) {
+    for (std::size_t i = 0; i < 800; ++i) {
       opus_trak.addMdatData(resources[i].timestamp, resources[i].data, resources[i].is_key);
     }
     writer.appendTrakAndUdtaBoxInfo({&opus_trak});
@@ -137,15 +137,15 @@ int main(int argc, char** argv) {
                                               .width = 640,
                                               .height = 240,
                                               .writer = &writer});
-    for (size_t s = 0; s < 16; ++s) {
+    for (std::size_t s = 0; s < 16; ++s) {
       // chunk length: 1000ms
-      for (size_t j = 0; j < 50; ++j) {
-        auto i = s * 50 + j;
+      for (std::size_t j = 0; j < 50; ++j) {
+        const auto i = s * 50 + j;
         opus_trak.addMdatData(opus_resources[i].timestamp, opus_resources[i].data, opus_resources[i].is_key);
       }
       opus_trak.terminateCurrentChunk();
-      for (size_t j = 0; j < 25; ++j) {
-        auto i = s * 25 + j;
+      for (std::size_t j = 0; j < 25; ++j) {
+        const auto i = s * 25 + j;
         vpx_trak.addMdatData(vp9_resources[i].timestamp, vp9_resources[i].data, vp9_resources[i].is_key);
       }
       vpx_trak.terminateCurrentChunk();
@@ -170,15 +170,15 @@ int main(int argc, char** argv) {
                                               .width = 240,
                                               .height = 160,
                                               .writer = &writer});
-    for (size_t s = 0; s < 4; ++s) {
+    for (std::size_t s = 0; s < 4; ++s) {
       // chunk length: 1000ms
-      for (size_t j = 0; j < 50; ++j) {
-        auto i = s * 50 + j;
+      for (std::size_t j = 0; j < 50; ++j) {
+        const auto i = s * 50 + j;
         opus_trak.addMdatData(opus_resources[i].timestamp, opus_resources[i].data, opus_resources[i].is_key);
       }
       opus_trak.terminateCurrentChunk();
-      for (size_t j = 0; j < 25; ++j) {
-        auto i = s * 25 + j;
+      for (std::size_t j = 0; j < 25; ++j) {
+        const auto i = s * 25 + j;
         av1_trak.addMdatData(av1_resources[i].timestamp, av1_resources[i].data, av1_resources[i].is_key);
       }
       av1_trak.terminateCurrentChunk();
@@ -209,15 +209,15 @@ int main(int argc, char** argv) {
                                               .width = 640,
                                               .height = 240,
                                               .writer = &writer});
-    for (size_t s = 0; s < 16; ++s) {
+    for (std::size_t s = 0; s < 16; ++s) {
       // chunk length: 960ms
-      for (size_t j = 0; j < 40; ++j) {
-        auto i = s * 40 + j;
+      for (std::size_t j = 0; j < 40; ++j) {
+        const auto i = s * 40 + j;
         mp3_trak.addMdatData(mp3_resources[i].timestamp, mp3_resources[i].data, mp3_resources[i].is_key);
       }
       mp3_trak.terminateCurrentChunk();
-      for (size_t j = 0; j < 24; ++j) {
-        auto i = s * 24 + j;
+      for (std::size_t j = 0; j < 24; ++j) {
+        const auto i = s * 24 + j;
         vpx_trak.addMdatData(vp8_resources[i].timestamp, vp8_resources[i].data, vp8_resources[i].is_key);
       }
       vpx_trak.terminateCurrentChunk();
@@ -247,15 +247,15 @@ int main(int argc, char** argv) {
                                               .width = 640,
                                               .height = 240,
                                               .writer = &writer});
-    for (size_t s = 0; s < 16; ++s) {
+    for (std::size_t s = 0; s < 16; ++s) {
       // chunk length: 960ms
-      for (size_t j = 0; j < 45; ++j) {
-        auto i = s * 45 + j;
+      for (std::size_t j = 0; j < 45; ++j) {
+        const auto i = s * 45 + j;
         aac_trak.addMdatData(aac_resources[i].timestamp, aac_resources[i].data, aac_resources[i].is_key);
       }
       aac_trak.terminateCurrentChunk();
-      for (size_t j = 0; j < 24; ++j) {
-        auto i = s * 24 + j;
+      for (std::size_t j = 0; j < 24; ++j) {
+        const auto i = s * 24 + j;
         vpx_trak.addMdatData(vp9_resources[i].timestamp, vp9_resources[i].data, vp9_resources[i].is_key);
       }
       vpx_trak.terminateCurrentChunk();
@@ -280,15 +280,15 @@ int main(int argc, char** argv) {
                                               .width = 640,
                                               .height = 240,
                                               .writer = &writer});
-    for (size_t s = 0; s < 16; ++s) {
+    for (std::size_t s = 0; s < 16; ++s) {
       // chunk length: 1000ms
-      for (size_t j = 0; j < 50; ++j) {
-        auto i = s * 50 + j;
+      for (std::size_t j = 0; j < 50; ++j) {
+        const auto i = s * 50 + j;
         opus_trak.addMdatData(opus_resources[i].timestamp, opus_resources[i].data, opus_resources[i].is_key);
       }
       opus_trak.terminateCurrentChunk();
-      for (size_t j = 0; j < 25; ++j) {
-        auto i = s * 25 + j;
+      for (std::size_t j = 0; j < 25; ++j) {
+        const auto i = s * 25 + j;
         vpx_trak.addMdatData(vp9_resources[i].timestamp, vp9_resources[i].data, vp9_resources[i].is_key);
       }
       vpx_trak.terminateCurrentChunk();
@@ -320,15 +320,15 @@ int main(int argc, char** argv) {
                                               .width = 640,
                                               .height = 240,
                                               .writer = &writer});
-    for (size_t s = 0; s < 16; ++s) {
+    for (std::size_t s = 0; s < 16; ++s) {
       // chunk length: 960 ms
-      for (size_t j = 0; j < 45; ++j) {
-        auto i = s * 45 + j;
+      for (std::size_t j = 0; j < 45; ++j) {
+        const auto i = s * 45 + j;
         aac_trak.addMdatData(aac_resources[i].timestamp, aac_resources[i].data, aac_resources[i].is_key);
       }
       aac_trak.terminateCurrentChunk();
-      for (size_t j = 0; j < 24; ++j) {
-        auto i = s * 24 + j;
+      for (std::size_t j = 0; j < 24; ++j) {
+        const auto i = s * 24 + j;
         vpx_trak.addMdatData(vp9_resources[i].timestamp, vp9_resources[i].data, vp9_resources[i].is_key);
       }
       vpx_trak.terminateCurrentChunk();
