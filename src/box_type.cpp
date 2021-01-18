@@ -48,7 +48,7 @@ std::string BoxType::toString() const {
 }
 
 bool BoxType::matchWith(const BoxType& other) const {
-  auto boxTypeAny = box_type_any();
+  const auto boxTypeAny = box_type_any();
   if (*this == boxTypeAny || other == boxTypeAny) {
     return true;
   }
