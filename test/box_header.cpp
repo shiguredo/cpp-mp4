@@ -13,11 +13,11 @@
 BOOST_AUTO_TEST_SUITE(box_header)
 
 struct BoxHeaderConstructorTestCase {
-  std::string name;
-  std::vector<std::uint8_t> buf;
-  std::streamoff seek;
-  bool throw_exception;
-  shiguredo::mp4::BoxHeader expected;
+  const std::string name;
+  const std::vector<std::uint8_t> buf;
+  const std::streamoff seek;
+  const bool throw_exception;
+  const shiguredo::mp4::BoxHeader expected;
 };
 
 BoxHeaderConstructorTestCase box_header_constructor_test_cases[] = {
@@ -80,11 +80,11 @@ BOOST_AUTO_TEST_CASE(box_header_constructor) {
 }
 
 struct BoxHeaderWriteTestCase {
-  std::string name;
-  std::vector<std::uint8_t> pre;
+  const std::string name;
+  const std::vector<std::uint8_t> pre;
   shiguredo::mp4::BoxHeader bi;
-  shiguredo::mp4::BoxHeader expected_bi;
-  std::vector<std::uint8_t> expected_bytes;
+  const shiguredo::mp4::BoxHeader expected_bi;
+  const std::vector<std::uint8_t> expected_bytes;
 };
 
 BoxHeaderWriteTestCase box_header_write_test_cases[] = {
@@ -132,8 +132,8 @@ BOOST_AUTO_TEST_CASE(box_header_write) {
     std::copy(std::begin(tc.pre), std::end(tc.pre), std::ostreambuf_iterator<char>(ss));
     tc.bi.write(ss);
     BOOST_REQUIRE(tc.expected_bi == tc.bi);
-    auto s = ss.str();
-    std::vector<std::uint8_t> actual_bytes(std::begin(s), std::end(s));
+    const auto s = ss.str();
+    const std::vector<std::uint8_t> actual_bytes(std::begin(s), std::end(s));
     BOOST_REQUIRE_EQUAL_COLLECTIONS(std::begin(tc.expected_bytes), std::end(tc.expected_bytes), actual_bytes.data(),
                                     actual_bytes.data() + std::size(actual_bytes));
   }

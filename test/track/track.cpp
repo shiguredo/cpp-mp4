@@ -13,8 +13,8 @@
 BOOST_AUTO_TEST_SUITE(track)
 
 struct MakeSttsEntriesTestCase {
-  std::vector<std::uint32_t> sample_duraitons;
-  std::vector<shiguredo::mp4::box::SttsEntry> entries;
+  const std::vector<std::uint32_t> sample_duraitons;
+  const std::vector<shiguredo::mp4::box::SttsEntry> entries;
 };
 
 MakeSttsEntriesTestCase make_stts_entries_test_cases[] = {
@@ -52,8 +52,8 @@ BOOST_AUTO_TEST_CASE(make_stts_entries) {
 }
 
 struct MakeStscEntriesTestCase {
-  std::vector<shiguredo::mp4::track::ChunkInfo> chunk_offsets;
-  std::vector<shiguredo::mp4::box::StscEntry> entries;
+  const std::vector<shiguredo::mp4::track::ChunkInfo> chunk_offsets;
+  const std::vector<shiguredo::mp4::box::StscEntry> entries;
 };
 
 MakeStscEntriesTestCase make_stsc_entries_test_cases[] = {
@@ -100,8 +100,8 @@ BOOST_AUTO_TEST_CASE(make_stsc_entries) {
 }
 
 struct MakeOffsetBoxTestCase {
-  std::vector<shiguredo::mp4::track::ChunkInfo> chunk_offsets;
-  bool use_co64;
+  const std::vector<shiguredo::mp4::track::ChunkInfo> chunk_offsets;
+  const bool use_co64;
   shiguredo::mp4::Box* box;
 };
 
@@ -143,16 +143,16 @@ MakeOffsetBoxTestCase make_offset_box_test_cases[] = {
 BOOST_AUTO_TEST_CASE(make_offset_box) {
   BOOST_TEST_MESSAGE("make_offset_box");
   for (const auto& tc : make_offset_box_test_cases) {
-    auto box = shiguredo::mp4::track::make_offset_box(tc.chunk_offsets);
+    const auto box = shiguredo::mp4::track::make_offset_box(tc.chunk_offsets);
     if (tc.use_co64) {
-      shiguredo::mp4::box::Co64* expected = dynamic_cast<shiguredo::mp4::box::Co64*>(tc.box);
-      shiguredo::mp4::box::Co64* actual = dynamic_cast<shiguredo::mp4::box::Co64*>(box);
+      const shiguredo::mp4::box::Co64* expected = dynamic_cast<shiguredo::mp4::box::Co64*>(tc.box);
+      const shiguredo::mp4::box::Co64* actual = dynamic_cast<shiguredo::mp4::box::Co64*>(box);
       BOOST_REQUIRE(expected != nullptr);
       BOOST_REQUIRE(actual != nullptr);
       BOOST_REQUIRE_EQUAL(*expected, *actual);
     } else {
-      shiguredo::mp4::box::Stco* expected = dynamic_cast<shiguredo::mp4::box::Stco*>(tc.box);
-      shiguredo::mp4::box::Stco* actual = dynamic_cast<shiguredo::mp4::box::Stco*>(box);
+      const shiguredo::mp4::box::Stco* expected = dynamic_cast<shiguredo::mp4::box::Stco*>(tc.box);
+      const shiguredo::mp4::box::Stco* actual = dynamic_cast<shiguredo::mp4::box::Stco*>(box);
       BOOST_REQUIRE(expected != nullptr);
       BOOST_REQUIRE(actual != nullptr);
       BOOST_REQUIRE_EQUAL(*expected, *actual);

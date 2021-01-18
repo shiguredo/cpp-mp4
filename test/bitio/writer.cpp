@@ -22,7 +22,7 @@ BOOST_AUTO_TEST_CASE(writer_basic) {
   //         ^ ^^^^ ^^^^ ^^^^ ^^^^
   writer.writeBits({0x07, 0x63, 0xd5}, 17);
 
-  auto ret = writer.write({0xa4, 0x6f});
+  const auto ret = writer.write({0xa4, 0x6f});
   BOOST_REQUIRE_EQUAL(2, ret);
 
   // 0000,0111,0110,1001,1110,0011
@@ -36,14 +36,14 @@ BOOST_AUTO_TEST_CASE(writer_basic) {
   //    ^ ^^^^
   writer.writeBits({0xf7}, 5);
 
-  std::uint8_t expected[] = {
+  const std::uint8_t expected[] = {
       0xb5, 0x63, 0xd5,  // 1011,0101,0110,0011,1101,0101
       0xa4, 0x6f,        //
       0xb4, 0xf1, 0xd7,  // 1011,0100,1111,0001,1101,0111
   };
 
-  auto s = ss.str();
-  std::vector<std::uint8_t> actual(std::begin(s), std::end(s));
+  const auto s = ss.str();
+  const std::vector<std::uint8_t> actual(std::begin(s), std::end(s));
   BOOST_REQUIRE_EQUAL(8, std::size(actual));
 
   BOOST_REQUIRE_EQUAL_COLLECTIONS(expected, expected + 8, actual.data(), actual.data() + std::size(actual));
