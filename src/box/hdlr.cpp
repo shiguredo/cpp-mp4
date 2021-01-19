@@ -65,7 +65,7 @@ std::uint64_t Hdlr::readData(std::istream& is) {
   rbits += bitio::read_array_uint8_4(&reader, &m_flags);
   rbits += bitio::read_array_uint8_4(&reader, &m_flags_mask);
 
-  auto offset_to_end = static_cast<std::uint64_t>(shiguredo::mp4::stream::get_istream_offset_to_end(is));
+  const auto offset_to_end = static_cast<std::uint64_t>(shiguredo::mp4::stream::get_istream_offset_to_end(is));
   std::uint64_t name_rbits;
   if (m_pre_defined != 0) {
     name_rbits = bitio::read_pascal_string(&reader, &m_name, offset_to_end * 8);

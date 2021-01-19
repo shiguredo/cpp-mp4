@@ -8,9 +8,9 @@
 BOOST_AUTO_TEST_SUITE(mp4_time)
 
 struct TimeTestCase {
-  std::uint64_t from_epoch_19700101;
-  std::uint64_t from_epoch_19040101;
-  std::string formated;
+  const std::uint64_t from_epoch_19700101;
+  const std::uint64_t from_epoch_19040101;
+  const std::string formated;
 };
 
 TimeTestCase time_test_cases[] = {
@@ -39,7 +39,7 @@ TimeTestCase time_test_cases[] = {
 BOOST_AUTO_TEST_CASE(epoch) {
   BOOST_TEST_MESSAGE("epoch");
   for (const auto& tc : time_test_cases) {
-    auto from_epoch_19040101 = shiguredo::mp4::time::convert_to_epoch_19040101(tc.from_epoch_19700101);
+    const auto from_epoch_19040101 = shiguredo::mp4::time::convert_to_epoch_19040101(tc.from_epoch_19700101);
     BOOST_REQUIRE_EQUAL(tc.from_epoch_19040101, from_epoch_19040101);
     BOOST_REQUIRE_EQUAL(tc.formated, shiguredo::mp4::time::format_epoch_19040101(from_epoch_19040101));
   }

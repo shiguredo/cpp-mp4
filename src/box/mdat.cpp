@@ -44,7 +44,7 @@ std::uint64_t Mdat::getDataSize() const {
 
 std::uint64_t Mdat::readData(std::istream& is) {
   bitio::Reader reader(is);
-  std::size_t offset_to_end = static_cast<std::size_t>(shiguredo::mp4::stream::get_istream_offset_to_end(is));
+  const std::size_t offset_to_end = static_cast<std::size_t>(shiguredo::mp4::stream::get_istream_offset_to_end(is));
   return bitio::read_vector_uint<std::uint8_t>(&reader, offset_to_end, &m_data);
 }
 

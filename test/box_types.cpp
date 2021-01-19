@@ -12,11 +12,11 @@
 BOOST_AUTO_TEST_SUITE(box)
 
 struct BoxTypesTestCase {
-  std::string name;
-  shiguredo::mp4::Box* src;
+  const std::string name;
+  const shiguredo::mp4::Box* src;
   shiguredo::mp4::Box* dst;
-  std::vector<std::uint8_t> bin;
-  std::string str;
+  const std::vector<std::uint8_t> bin;
+  const std::string str;
 };
 
 BoxTypesTestCase box_test_cases[] = {

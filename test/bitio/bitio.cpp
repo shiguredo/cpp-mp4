@@ -13,9 +13,9 @@
 BOOST_AUTO_TEST_SUITE(marshal)
 
 struct UnmarshalPascalStringTestCase {
-  std::string name;
-  std::vector<std::uint8_t> bin;
-  std::string str;
+  const std::string name;
+  const std::vector<std::uint8_t> bin;
+  const std::string str;
 };
 
 UnmarshalPascalStringTestCase unmarshal_pascal_string_test_cases[] = {

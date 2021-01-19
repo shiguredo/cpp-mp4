@@ -15,8 +15,8 @@
 namespace shiguredo::mp4::bitio {
 
 template <typename T>
-std::uint64_t write_int(Writer* writer, const T val, std::uint64_t size = sizeof(T) * 8) {
-  bool signed_bit = val < 0;
+std::uint64_t write_int(Writer* writer, const T val, const std::uint64_t size = sizeof(T) * 8) {
+  const bool signed_bit = val < 0;
   std::uint64_t wbits = 0;
   for (std::uint64_t i = 0; i < size; i += 8) {
     T v = val;
@@ -42,7 +42,7 @@ std::uint64_t write_int(Writer* writer, const T val, std::uint64_t size = sizeof
 }
 
 template <typename T>
-std::uint64_t read_int(Reader* reader, T* var, std::uint64_t size = sizeof(T) * 8) {
+std::uint64_t read_int(Reader* reader, T* var, const std::uint64_t size = sizeof(T) * 8) {
   if (size == 0) {
     throw std::invalid_argument(fmt::format("bitio::read_int(): size must not be zero: {}", size));
   }
@@ -71,7 +71,7 @@ std::uint64_t read_int(Reader* reader, T* var, std::uint64_t size = sizeof(T) * 
 }
 
 template <typename T>
-std::uint64_t write_uint(Writer* writer, const T val, std::uint64_t size = sizeof(T) * 8) {
+std::uint64_t write_uint(Writer* writer, const T val, const std::uint64_t size = sizeof(T) * 8) {
   std::uint64_t wbits = 0;
   for (std::uint64_t i = 0; i < size; i += 8) {
     T v = val;
@@ -89,7 +89,7 @@ std::uint64_t write_uint(Writer* writer, const T val, std::uint64_t size = sizeo
 }
 
 template <typename T>
-std::uint64_t read_uint(Reader* reader, T* var, std::uint64_t size = sizeof(T) * 8) {
+std::uint64_t read_uint(Reader* reader, T* var, const std::uint64_t size = sizeof(T) * 8) {
   if (size == 0) {
     throw std::invalid_argument(fmt::format("bitio::read_uint(): size must not be zero: {}", size));
   }
@@ -106,16 +106,16 @@ std::uint64_t read_uint(Reader* reader, T* var, std::uint64_t size = sizeof(T) *
 }
 
 std::uint64_t write_string(Writer*, const std::string&);
-std::uint64_t read_string(Reader*, std::string*, std::uint64_t);
+std::uint64_t read_string(Reader*, std::string*, const std::uint64_t);
 
 std::uint64_t write_pascal_string(Writer*, const std::string&);
-std::uint64_t read_pascal_string(Reader*, std::string*, std::uint64_t);
+std::uint64_t read_pascal_string(Reader*, std::string*, const std::uint64_t);
 
 std::uint64_t write_bool(Writer*, const bool);
 std::uint64_t read_bool(Reader*, bool*);
 
-std::uint64_t write_array_uint8_4(Writer*, const std::array<uint8_t, 4>&);
-std::uint64_t read_array_uint8_4(Reader*, std::array<uint8_t, 4>*);
+std::uint64_t write_array_uint8_4(Writer*, const std::array<std::uint8_t, 4>&);
+std::uint64_t read_array_uint8_4(Reader*, std::array<std::uint8_t, 4>*);
 
 template <typename T>
 std::uint64_t write_vector_uint(Writer* writer, const std::vector<T>& v) {

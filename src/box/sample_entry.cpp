@@ -176,7 +176,8 @@ std::uint64_t AudioSampleEntry::getDataSize() const {
 std::uint64_t AudioSampleEntry::readData(std::istream& is) {
   bitio::Reader reader(is);
   if (m_under_wave) {
-    std::uint64_t offset_to_end = static_cast<std::uint64_t>(shiguredo::mp4::stream::get_istream_offset_to_end(is));
+    const std::uint64_t offset_to_end =
+        static_cast<std::uint64_t>(shiguredo::mp4::stream::get_istream_offset_to_end(is));
     return bitio::read_vector_uint<std::uint8_t>(&reader, offset_to_end, &m_quick_time_data);
   }
   std::uint64_t rbits = readReservedAndDataReferenceIndex(&reader);
@@ -193,7 +194,7 @@ std::uint64_t AudioSampleEntry::readData(std::istream& is) {
     m_is_quick_time_compatible = false;
     return rbits;
   }
-  std::uint64_t offset_to_end = static_cast<std::uint64_t>(shiguredo::mp4::stream::get_istream_offset_to_end(is));
+  const std::uint64_t offset_to_end = static_cast<std::uint64_t>(shiguredo::mp4::stream::get_istream_offset_to_end(is));
   if (offset_to_end == 0) {
     m_is_quick_time_compatible = false;
     return rbits;

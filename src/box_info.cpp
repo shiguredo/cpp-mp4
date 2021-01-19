@@ -57,7 +57,7 @@ std::string BoxInfo::toString() const {
   std::vector<std::string> leafs;
   std::transform(std::begin(m_leafs), std::end(m_leafs), std::back_inserter(leafs),
                  [](const BoxInfo* info) { return fmt::format("{}", info->toString()); });
-  std::string pad((std::size(m_path) - 1) * 2, ' ');
+  const std::string pad((std::size(m_path) - 1) * 2, ' ');
   if (std::empty(leafs)) {
     return fmt::format("{}{}", pad, m_box->toString());
   }
@@ -66,8 +66,8 @@ std::string BoxInfo::toString() const {
 
 std::uint64_t BoxInfo::adjustOffsetAndSize(const std::uint64_t offset) {
   std::uint64_t leafs_size = 0;
-  std::uint64_t header_size = m_box->getHeaderSize();
-  std::uint64_t data_size = m_box->getDataSize();
+  const std::uint64_t header_size = m_box->getHeaderSize();
+  const std::uint64_t data_size = m_box->getDataSize();
   for (auto l : m_leafs) {
     leafs_size += l->adjustOffsetAndSize(offset + header_size + data_size + leafs_size);
   }

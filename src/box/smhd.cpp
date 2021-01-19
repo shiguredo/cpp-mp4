@@ -34,7 +34,7 @@ std::string Smhd::toStringOnlyData() const {
 
 std::uint64_t Smhd::writeData(std::ostream& os) const {
   bitio::Writer writer(os);
-  uint64_t wbits = writeVersionAndFlag(&writer);
+  const std::uint64_t wbits = writeVersionAndFlag(&writer);
   return wbits + bitio::write_uint<std::int16_t>(&writer, m_balance) +
          bitio::write_uint<std ::uint16_t>(&writer, m_reserved);
 }

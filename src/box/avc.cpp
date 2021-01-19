@@ -188,7 +188,7 @@ std::uint64_t AVCDecoderConfiguration::readData(std::istream& is) {
   if (!is_avc_high_profile(m_profile)) {
     return rbits;
   }
-  auto offset_to_end = shiguredo::mp4::stream::get_istream_offset_to_end(is);
+  const auto offset_to_end = shiguredo::mp4::stream::get_istream_offset_to_end(is);
   if (offset_to_end < AVCHighProfileMinimumSize) {
     spdlog::debug("AVCDecoderConfiguration::readData: offset_to_end: {}", offset_to_end);
     return rbits + static_cast<std::uint64_t>(offset_to_end) * 8;

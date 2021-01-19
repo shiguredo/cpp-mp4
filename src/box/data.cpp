@@ -61,7 +61,7 @@ std::uint64_t Data::readData(std::istream& is) {
   auto rbits = bitio::read_uint<std::uint32_t>(&reader, &data_type);
   m_data_type = static_cast<DataType>(data_type);
   rbits += bitio::read_uint<std::uint32_t>(&reader, &m_data_lang);
-  std::size_t offset_to_end = static_cast<std::size_t>(shiguredo::mp4::stream::get_istream_offset_to_end(is));
+  const std::size_t offset_to_end = static_cast<std::size_t>(shiguredo::mp4::stream::get_istream_offset_to_end(is));
   return rbits + bitio::read_vector_uint<std::uint8_t>(&reader, offset_to_end, &m_data);
 }
 

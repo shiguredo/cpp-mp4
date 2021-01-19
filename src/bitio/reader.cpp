@@ -18,7 +18,7 @@ std::streamsize Reader::read(std::vector<std::uint8_t>* p) {
   if (m_width != 0) {
     throw std::invalid_argument("bitio::Reader::read(): m_width must be 0: m_width=" + std::to_string(m_width));
   }
-  auto size = static_cast<std::streamsize>(p->size());
+  const auto size = static_cast<std::streamsize>(p->size());
   m_is.read(reinterpret_cast<char*>(p->data()), size);
   if (!m_is.good()) {
     throw std::runtime_error(fmt::format("bitio::Reader::read(): istream::read() failed: rdstate={}", m_is.rdstate()));
@@ -26,11 +26,11 @@ std::streamsize Reader::read(std::vector<std::uint8_t>* p) {
   return size;
 }
 
-void Reader::readBits(std::vector<std::uint8_t>* data, std::uint64_t size) {
-  auto bytes = (size + 7) >> 3;
+void Reader::readBits(std::vector<std::uint8_t>* data, const std::uint64_t size) {
+  const auto bytes = (size + 7) >> 3;
   data->resize(bytes);
   std::fill(std::begin(*data), std::end(*data), 0);
-  auto offset = (bytes << 3) - (size);
+  const auto offset = (bytes << 3) - (size);
 
   for (std::uint64_t i = 0; i < size; ++i) {
     auto bit = readBit();
@@ -57,7 +57,7 @@ bool Reader::readBit() {
   return ((m_octet >> m_width) & 0x01) != 0;
 }
 
-std::uint64_t Reader::seek(std::uint64_t offset, std::ios_base::seekdir way) {
+std::uint64_t Reader::seek(const std::uint64_t offset, const std::ios_base::seekdir way) {
   if ((way == std::ios_base::cur) && (m_width != 0)) {
     throw std::invalid_argument("bitio::Reader::seek(): m_width must be 0: m_width=" + std::to_string(m_width));
   }
@@ -69,7 +69,7 @@ std::uint64_t Reader::seek(std::uint64_t offset, std::ios_base::seekdir way) {
   return static_cast<std::uint64_t>(m_is.tellg());
 }
 
-void Reader::setOctet(std::uint8_t octet) {
+void Reader::setOctet(const std::uint8_t octet) {
   m_octet = octet;
 }
 
@@ -77,7 +77,7 @@ std::uint8_t Reader::getOctet() const {
   return m_octet;
 }
 
-void Reader::setWidth(std::uint8_t width) {
+void Reader::setWidth(const std::uint8_t width) {
   m_width = width;
 }
 
