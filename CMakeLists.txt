@@ -245,6 +245,7 @@ target_sources(shiguredo-mp4
     src/track/soun.cpp
     src/track/vide.cpp
     src/track/vpx.cpp
+    src/version.cpp
     src/writer/writer.cpp
     src/writer/simple_writer.cpp
     src/writer/faststart_writer.cpp
