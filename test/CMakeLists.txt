@@ -28,6 +28,7 @@ add_executable(mp4_test
     box_header.cpp
     box_type.cpp
     box_types.cpp
+    version.cpp
     )
 
 set_target_properties(mp4_test PROPERTIES CXX_STANDARD 20 C_STANDARD 11)

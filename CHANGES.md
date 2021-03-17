@@ -9,9 +9,13 @@
 - FIX
     - バグ修正
 
-## develop
+## 2021.2
 
 - [ADD] av01, av1C box のサポート
+    - @haruyama
+- [ADD] get_version_string() の追加
+    - @haruyama
+- [UPDATE] `rapidcsv` を `8.48` に
     - @haruyama
 - [FIX] MP4 ファイルの読み込み時に, ファイル終端を越える box のサイズを指定されたら例外を投げる
     - @haruyama
