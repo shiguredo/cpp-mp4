@@ -83,7 +83,7 @@ std::uint16_t encode_language(const std::array<std::uint8_t, 3>& lng) {
   return static_cast<std::uint16_t>(((lng[0] - 0x60) << 10) + ((lng[1] - 0x60) << 5) + ((lng[2] - 0x60)));
 }
 
-std::array<std::uint8_t, 3> decode_language(const uint16_t enc) {
+std::array<std::uint8_t, 3> decode_language(const std::uint16_t enc) {
   std::array<std::uint8_t, 3> lng;
   lng[0] = ((enc >> 10) & 0x1f) + 0x60;
   lng[1] = ((enc >> 5) & 0x1f) + 0x60;

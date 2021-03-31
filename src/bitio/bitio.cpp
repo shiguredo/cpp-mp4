@@ -29,7 +29,7 @@ std::uint64_t write_string(Writer* writer, const std::string& str) {
   return wbits;
 }
 
-std::uint64_t read_string(Reader* reader, std::string* str, std::uint64_t max_rbits) {
+std::uint64_t read_string(Reader* reader, std::string* str, const std::uint64_t max_rbits) {
   std::uint64_t rbits = 0;
   str->clear();
   while (rbits < max_rbits) {
@@ -61,7 +61,7 @@ std::uint64_t write_pascal_string(Writer* writer, const std::string& str) {
   return wbits;
 }
 
-std::uint64_t read_pascal_string(Reader* reader, std::string* str, std::uint64_t max_rbits) {
+std::uint64_t read_pascal_string(Reader* reader, std::string* str, const std::uint64_t max_rbits) {
   if (max_rbits < 2 * 8) {
     return read_string(reader, str, max_rbits);
   }
@@ -110,7 +110,7 @@ std::uint64_t read_bool(Reader* reader, bool* b) {
   return 1;
 }
 
-std::uint64_t write_array_uint8_4(Writer* writer, const std::array<uint8_t, 4>& v) {
+std::uint64_t write_array_uint8_4(Writer* writer, const std::array<std::uint8_t, 4>& v) {
   std::uint64_t wbits = 0;
   for (const auto c : v) {
     wbits += write_uint<std::uint8_t>(writer, c);
@@ -118,7 +118,7 @@ std::uint64_t write_array_uint8_4(Writer* writer, const std::array<uint8_t, 4>& 
   return wbits;
 }
 
-std::uint64_t read_array_uint8_4(Reader* reader, std::array<uint8_t, 4>* v) {
+std::uint64_t read_array_uint8_4(Reader* reader, std::array<std::uint8_t, 4>* v) {
   for (std::size_t i = 0; i < 4; ++i) {
     read_uint<std::uint8_t>(reader, &((*v)[i]));
   }

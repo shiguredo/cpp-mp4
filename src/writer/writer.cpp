@@ -34,7 +34,7 @@ std::uint32_t Writer::getMvhdTimescale() const {
 }
 
 std::uint32_t Writer::getAndUpdateNextTrackID() {
-  auto track_id = m_next_track_id;
+  const auto track_id = m_next_track_id;
   ++m_next_track_id;
   return track_id;
 }

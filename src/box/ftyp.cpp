@@ -64,12 +64,12 @@ std::uint64_t Ftyp::readData(std::istream& is) {
   bitio::Reader reader(is);
   auto rbits = bitio::read_array_uint8_4(&reader, &m_major_brand);
   rbits += bitio::read_uint<std::uint32_t>(&reader, &m_minor_version);
-  size_t offset_to_end = static_cast<std::size_t>(shiguredo::mp4::stream::get_istream_offset_to_end(is));
+  const std::size_t offset_to_end = static_cast<std::size_t>(shiguredo::mp4::stream::get_istream_offset_to_end(is));
   if (offset_to_end % 4 != 0) {
     throw std::runtime_error("Ftyp::readData(): box has invalid length");
   }
   m_compatible_brands.resize(offset_to_end / 4);
-  for (size_t i = 0; i * 4 < offset_to_end; ++i) {
+  for (std::size_t i = 0; i * 4 < offset_to_end; ++i) {
     Brand brand;
     rbits += bitio::read_array_uint8_4(&reader, &brand);
     m_compatible_brands[i] = brand;

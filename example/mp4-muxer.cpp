@@ -17,6 +17,7 @@
 #include <CLI/Formatter.hpp>
 
 #include "shiguredo/mp4/track/aac.hpp"
+#include "shiguredo/mp4/track/av1.hpp"
 #include "shiguredo/mp4/track/mp3.hpp"
 #include "shiguredo/mp4/track/opus.hpp"
 #include "shiguredo/mp4/track/vpx.hpp"
@@ -49,6 +50,7 @@ int main(int argc, char** argv) {
   std::string opus_filename;
   std::string vp9_filename;
   std::string vp8_filename;
+  std::string av1_filename;
   std::string mp3_filename;
   std::string aac_filename;
 
@@ -68,6 +70,11 @@ int main(int argc, char** argv) {
   opusvp9_faststart->add_option("-f,--file", filename, "filename");
   opusvp9_faststart->add_option("--opus", opus_filename, "opus resource filename");
   opusvp9_faststart->add_option("--vp9", vp9_filename, "vp9 resource filename");
+
+  auto opusav1 = app.add_subcommand("opusav1");
+  opusav1->add_option("-f,--file", filename, "filename");
+  opusav1->add_option("--opus", opus_filename, "opus resource filename");
+  opusav1->add_option("--av1", av1_filename, "av1 resource filename");
 
   auto mp3vp8 = app.add_subcommand("mp3vp8");
   mp3vp8->add_option("-f,--file", filename, "filename");
@@ -89,7 +96,7 @@ int main(int argc, char** argv) {
   spdlog::set_level(log_level);
   spdlog::set_default_logger(spdlog::stderr_color_mt("mp4-muxer"));
 
-  auto subcommands = app.get_subcommands();
+  const auto subcommands = app.get_subcommands();
 
   if (subcommands[0] == csv) {
     std::vector<Resource> resources;
@@ -102,11 +109,12 @@ int main(int argc, char** argv) {
     std::vector<Resource> resources;
     load_resources_from_csv(&resources, opus_filename);
     std::ofstream ofs(filename, std::ios_base::binary);
-    shiguredo::mp4::writer::SimpleWriter writer(ofs, {.mvhd_timescale = 1000, .duration = 16.0f});
+    const float duration = 16.0f;
+    shiguredo::mp4::writer::SimpleWriter writer(ofs, {.mvhd_timescale = 1000, .duration = duration});
     writer.writeFtypBox();
     shiguredo::mp4::track::OpusTrack opus_trak(
-        {.pre_skip = 312, .duration = 16.0f, .track_id = writer.getAndUpdateNextTrackID(), .writer = &writer});
-    for (size_t i = 0; i < 800; ++i) {
+        {.pre_skip = 312, .duration = duration, .track_id = writer.getAndUpdateNextTrackID(), .writer = &writer});
+    for (std::size_t i = 0; i < 800; ++i) {
       opus_trak.addMdatData(resources[i].timestamp, resources[i].data, resources[i].is_key);
     }
     writer.appendTrakAndUdtaBoxInfo({&opus_trak});
@@ -118,30 +126,64 @@ int main(int argc, char** argv) {
     std::vector<Resource> vp9_resources;
     load_resources_from_csv(&vp9_resources, vp9_filename);
     std::ofstream ofs(filename, std::ios_base::binary);
-    shiguredo::mp4::writer::SimpleWriter writer(ofs, {.mvhd_timescale = 1000, .duration = 16.0f});
+    const float duration = 16.0f;
+    shiguredo::mp4::writer::SimpleWriter writer(ofs, {.mvhd_timescale = 1000, .duration = duration});
     writer.writeFtypBox();
     shiguredo::mp4::track::OpusTrack opus_trak(
-        {.pre_skip = 312, .duration = 16.0f, .track_id = writer.getAndUpdateNextTrackID(), .writer = &writer});
+        {.pre_skip = 312, .duration = duration, .track_id = writer.getAndUpdateNextTrackID(), .writer = &writer});
     shiguredo::mp4::track::VPXTrack vpx_trak({.timescale = 16000,
-                                              .duration = 16.0f,
+                                              .duration = duration,
                                               .track_id = writer.getAndUpdateNextTrackID(),
                                               .width = 640,
                                               .height = 240,
                                               .writer = &writer});
-    for (size_t s = 0; s < 16; ++s) {
+    for (std::size_t s = 0; s < 16; ++s) {
       // chunk length: 1000ms
-      for (size_t j = 0; j < 50; ++j) {
-        auto i = s * 50 + j;
+      for (std::size_t j = 0; j < 50; ++j) {
+        const auto i = s * 50 + j;
         opus_trak.addMdatData(opus_resources[i].timestamp, opus_resources[i].data, opus_resources[i].is_key);
       }
       opus_trak.terminateCurrentChunk();
-      for (size_t j = 0; j < 25; ++j) {
-        auto i = s * 25 + j;
+      for (std::size_t j = 0; j < 25; ++j) {
+        const auto i = s * 25 + j;
         vpx_trak.addMdatData(vp9_resources[i].timestamp, vp9_resources[i].data, vp9_resources[i].is_key);
       }
       vpx_trak.terminateCurrentChunk();
     }
     writer.appendTrakAndUdtaBoxInfo({&opus_trak, &vpx_trak});
+    writer.writeFreeBoxAndMdatHeader();
+    writer.writeMoovBox();
+  } else if (subcommands[0] == opusav1) {
+    std::vector<Resource> opus_resources;
+    load_resources_from_csv(&opus_resources, opus_filename);
+    std::vector<Resource> av1_resources;
+    load_resources_from_csv(&av1_resources, av1_filename);
+    std::ofstream ofs(filename, std::ios_base::binary);
+    const float duration = 4.0f;
+    shiguredo::mp4::writer::SimpleWriter writer(ofs, {.mvhd_timescale = 1000, .duration = duration});
+    writer.writeFtypBox();
+    shiguredo::mp4::track::OpusTrack opus_trak(
+        {.pre_skip = 312, .duration = duration, .track_id = writer.getAndUpdateNextTrackID(), .writer = &writer});
+    shiguredo::mp4::track::AV1Track av1_trak({.timescale = 16000,
+                                              .duration = duration,
+                                              .track_id = writer.getAndUpdateNextTrackID(),
+                                              .width = 240,
+                                              .height = 160,
+                                              .writer = &writer});
+    for (std::size_t s = 0; s < 4; ++s) {
+      // chunk length: 1000ms
+      for (std::size_t j = 0; j < 50; ++j) {
+        const auto i = s * 50 + j;
+        opus_trak.addMdatData(opus_resources[i].timestamp, opus_resources[i].data, opus_resources[i].is_key);
+      }
+      opus_trak.terminateCurrentChunk();
+      for (std::size_t j = 0; j < 25; ++j) {
+        const auto i = s * 25 + j;
+        av1_trak.addMdatData(av1_resources[i].timestamp, av1_resources[i].data, av1_resources[i].is_key);
+      }
+      av1_trak.terminateCurrentChunk();
+    }
+    writer.appendTrakAndUdtaBoxInfo({&opus_trak, &av1_trak});
     writer.writeFreeBoxAndMdatHeader();
     writer.writeMoovBox();
   } else if (subcommands[0] == mp3vp8) {
@@ -150,10 +192,11 @@ int main(int argc, char** argv) {
     std::vector<Resource> vp8_resources;
     load_resources_from_csv(&vp8_resources, vp8_filename);
     std::ofstream ofs(filename, std::ios_base::binary);
-    shiguredo::mp4::writer::SimpleWriter writer(ofs, {.mvhd_timescale = 1000, .duration = 15.36f});
+    const float duration = 15.36f;
+    shiguredo::mp4::writer::SimpleWriter writer(ofs, {.mvhd_timescale = 1000, .duration = duration});
     writer.writeFtypBox();
     shiguredo::mp4::track::MP3Track mp3_trak({.timescale = 48000,
-                                              .duration = 15.36f,
+                                              .duration = duration,
                                               .track_id = writer.getAndUpdateNextTrackID(),
                                               .buffer_size_db = 768,
                                               .max_bitrate = 256000,
@@ -161,20 +204,20 @@ int main(int argc, char** argv) {
                                               .writer = &writer});
     shiguredo::mp4::track::VPXTrack vpx_trak({.codec = shiguredo::mp4::track::VPXCodec::VP8,
                                               .timescale = 16000,
-                                              .duration = 15.36f,
+                                              .duration = duration,
                                               .track_id = writer.getAndUpdateNextTrackID(),
                                               .width = 640,
                                               .height = 240,
                                               .writer = &writer});
-    for (size_t s = 0; s < 16; ++s) {
+    for (std::size_t s = 0; s < 16; ++s) {
       // chunk length: 960ms
-      for (size_t j = 0; j < 40; ++j) {
-        auto i = s * 40 + j;
+      for (std::size_t j = 0; j < 40; ++j) {
+        const auto i = s * 40 + j;
         mp3_trak.addMdatData(mp3_resources[i].timestamp, mp3_resources[i].data, mp3_resources[i].is_key);
       }
       mp3_trak.terminateCurrentChunk();
-      for (size_t j = 0; j < 24; ++j) {
-        auto i = s * 24 + j;
+      for (std::size_t j = 0; j < 24; ++j) {
+        const auto i = s * 24 + j;
         vpx_trak.addMdatData(vp8_resources[i].timestamp, vp8_resources[i].data, vp8_resources[i].is_key);
       }
       vpx_trak.terminateCurrentChunk();
@@ -188,30 +231,31 @@ int main(int argc, char** argv) {
     std::vector<Resource> vp9_resources;
     load_resources_from_csv(&vp9_resources, vp9_filename);
     std::ofstream ofs(filename, std::ios_base::binary);
-    shiguredo::mp4::writer::SimpleWriter writer(ofs, {.mvhd_timescale = 1000, .duration = 15.36f});
+    const float duration = 15.36f;
+    shiguredo::mp4::writer::SimpleWriter writer(ofs, {.mvhd_timescale = 1000, .duration = duration});
     writer.writeFtypBox();
     shiguredo::mp4::track::AACTrack aac_trak({.timescale = 48000,
-                                              .duration = 15.36f,
+                                              .duration = duration,
                                               .track_id = writer.getAndUpdateNextTrackID(),
                                               .buffer_size_db = 0,
                                               .max_bitrate = 64000,
                                               .avg_bitrate = 64000,
                                               .writer = &writer});
     shiguredo::mp4::track::VPXTrack vpx_trak({.timescale = 16000,
-                                              .duration = 15.36f,
+                                              .duration = duration,
                                               .track_id = writer.getAndUpdateNextTrackID(),
                                               .width = 640,
                                               .height = 240,
                                               .writer = &writer});
-    for (size_t s = 0; s < 16; ++s) {
+    for (std::size_t s = 0; s < 16; ++s) {
       // chunk length: 960ms
-      for (size_t j = 0; j < 45; ++j) {
-        auto i = s * 45 + j;
+      for (std::size_t j = 0; j < 45; ++j) {
+        const auto i = s * 45 + j;
         aac_trak.addMdatData(aac_resources[i].timestamp, aac_resources[i].data, aac_resources[i].is_key);
       }
       aac_trak.terminateCurrentChunk();
-      for (size_t j = 0; j < 24; ++j) {
-        auto i = s * 24 + j;
+      for (std::size_t j = 0; j < 24; ++j) {
+        const auto i = s * 24 + j;
         vpx_trak.addMdatData(vp9_resources[i].timestamp, vp9_resources[i].data, vp9_resources[i].is_key);
       }
       vpx_trak.terminateCurrentChunk();
@@ -225,25 +269,26 @@ int main(int argc, char** argv) {
     std::vector<Resource> vp9_resources;
     load_resources_from_csv(&vp9_resources, vp9_filename);
     std::ofstream ofs(filename, std::ios_base::binary);
-    shiguredo::mp4::writer::FaststartWriter writer(ofs, {.mvhd_timescale = 1000, .duration = 16.0f});
+    const float duration = 16.0f;
+    shiguredo::mp4::writer::FaststartWriter writer(ofs, {.mvhd_timescale = 1000, .duration = duration});
     writer.writeFtypBox();
     shiguredo::mp4::track::OpusTrack opus_trak(
-        {.pre_skip = 312, .duration = 16.0f, .track_id = writer.getAndUpdateNextTrackID(), .writer = &writer});
+        {.pre_skip = 312, .duration = duration, .track_id = writer.getAndUpdateNextTrackID(), .writer = &writer});
     shiguredo::mp4::track::VPXTrack vpx_trak({.timescale = 16000,
-                                              .duration = 16.0f,
+                                              .duration = duration,
                                               .track_id = writer.getAndUpdateNextTrackID(),
                                               .width = 640,
                                               .height = 240,
                                               .writer = &writer});
-    for (size_t s = 0; s < 16; ++s) {
+    for (std::size_t s = 0; s < 16; ++s) {
       // chunk length: 1000ms
-      for (size_t j = 0; j < 50; ++j) {
-        auto i = s * 50 + j;
+      for (std::size_t j = 0; j < 50; ++j) {
+        const auto i = s * 50 + j;
         opus_trak.addMdatData(opus_resources[i].timestamp, opus_resources[i].data, opus_resources[i].is_key);
       }
       opus_trak.terminateCurrentChunk();
-      for (size_t j = 0; j < 25; ++j) {
-        auto i = s * 25 + j;
+      for (std::size_t j = 0; j < 25; ++j) {
+        const auto i = s * 25 + j;
         vpx_trak.addMdatData(vp9_resources[i].timestamp, vp9_resources[i].data, vp9_resources[i].is_key);
       }
       vpx_trak.terminateCurrentChunk();
@@ -259,30 +304,31 @@ int main(int argc, char** argv) {
     std::vector<Resource> vp9_resources;
     load_resources_from_csv(&vp9_resources, vp9_filename);
     std::ofstream ofs(filename, std::ios_base::binary);
-    shiguredo::mp4::writer::FaststartWriter writer(ofs, {.mvhd_timescale = 1000, .duration = 15.36f});
+    const float duration = 15.36f;
+    shiguredo::mp4::writer::FaststartWriter writer(ofs, {.mvhd_timescale = 1000, .duration = duration});
     writer.writeFtypBox();
     shiguredo::mp4::track::AACTrack aac_trak({.timescale = 48000,
-                                              .duration = 15.36f,
+                                              .duration = duration,
                                               .track_id = writer.getAndUpdateNextTrackID(),
                                               .buffer_size_db = 0,
                                               .max_bitrate = 64000,
                                               .avg_bitrate = 64000,
                                               .writer = &writer});
     shiguredo::mp4::track::VPXTrack vpx_trak({.timescale = 16000,
-                                              .duration = 15.36f,
+                                              .duration = duration,
                                               .track_id = writer.getAndUpdateNextTrackID(),
                                               .width = 640,
                                               .height = 240,
                                               .writer = &writer});
-    for (size_t s = 0; s < 16; ++s) {
+    for (std::size_t s = 0; s < 16; ++s) {
       // chunk length: 960 ms
-      for (size_t j = 0; j < 45; ++j) {
-        auto i = s * 45 + j;
+      for (std::size_t j = 0; j < 45; ++j) {
+        const auto i = s * 45 + j;
         aac_trak.addMdatData(aac_resources[i].timestamp, aac_resources[i].data, aac_resources[i].is_key);
       }
       aac_trak.terminateCurrentChunk();
-      for (size_t j = 0; j < 24; ++j) {
-        auto i = s * 24 + j;
+      for (std::size_t j = 0; j < 24; ++j) {
+        const auto i = s * 24 + j;
         vpx_trak.addMdatData(vp9_resources[i].timestamp, vp9_resources[i].data, vp9_resources[i].is_key);
       }
       vpx_trak.terminateCurrentChunk();

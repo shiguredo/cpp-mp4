@@ -20,7 +20,7 @@ jobs:
       matrix:
         os:
           - ubuntu-20.04_x86_64
-    name: Lint hisui for ${{ matrix.os }}
+    name: Lint cpp-mp4 for ${{ matrix.os }}
     runs-on: ubuntu-20.04
     steps:
       - name: Install packages

@@ -24,7 +24,7 @@ void BoxMap::addBoxDef(const BoxFactory& factory, const BoxType& box_type, const
 }
 
 Box* BoxMap::getBoxInstance(const BoxType& type) {
-  auto it = m_map.find(type);
+  const auto it = m_map.find(type);
   Box* box;
   if (it == m_map.end()) {
     spdlog::debug("BoxMap::getBoxInstance(): box not found: {}", type.toString());
@@ -51,7 +51,7 @@ bool BoxMap::isSupported(const BoxType& box_type) const {
 }
 
 std::vector<std::uint8_t> BoxMap::getSupportedVersions(const BoxType& box_type) const {
-  auto it = m_map.find(box_type);
+  const auto it = m_map.find(box_type);
   if (it == std::end(m_map)) {
     throw std::runtime_error("BoxMap::getSupportedVersions(): not found");
   }
@@ -59,7 +59,7 @@ std::vector<std::uint8_t> BoxMap::getSupportedVersions(const BoxType& box_type) 
 }
 
 bool BoxMap::isSupportedVersion(const BoxType& box_type, const std::uint8_t ver) const {
-  auto it = m_map.find(box_type);
+  const auto it = m_map.find(box_type);
   if (it == std::end(m_map)) {
     return false;
   }

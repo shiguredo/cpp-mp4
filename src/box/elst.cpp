@@ -89,7 +89,7 @@ std::uint64_t Elst::readData(std::istream& is) {
   std::uint32_t entry_count;
   rbits += bitio::read_uint<std::uint32_t>(&reader, &entry_count);
   m_entries.resize(entry_count);
-  for (size_t i = 0; i < entry_count; ++i) {
+  for (std::size_t i = 0; i < entry_count; ++i) {
     ElstEntry entry;
     rbits += entry.readData(&reader, m_version);
     m_entries[i] = entry;

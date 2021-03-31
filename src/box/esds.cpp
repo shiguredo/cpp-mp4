@@ -295,7 +295,7 @@ std::uint64_t Esds::readData(std::istream& is) {
   std::uint64_t rbits = readVersionAndFlag(&reader);
   m_descriptors.clear();
   while (true) {
-    auto offset_to_end = shiguredo::mp4::stream::get_istream_offset_to_end(is);
+    const auto offset_to_end = shiguredo::mp4::stream::get_istream_offset_to_end(is);
     if (offset_to_end == 0) {
       return rbits;
     }

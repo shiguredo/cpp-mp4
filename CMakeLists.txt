@@ -14,7 +14,7 @@ include(cmake/tools.cmake)
 set_cache_string_from_env(BOOST_VERSION 1.75.0 "Boost のバージョン")
 set_cache_string_from_env(CLI11_VERSION 1.9.1 "CLI11 のバージョン")
 set_cache_string_from_env(FMT_VERSION 7.1.3 "fmt のバージョン")
-set_cache_string_from_env(RAPIDCSV_VERSION 8.40 "rapidcsv のバージョン")
+set_cache_string_from_env(RAPIDCSV_VERSION 8.48 "rapidcsv のバージョン")
 set_cache_string_from_env(SPDLOG_VERSION 1.8.2 "spdlog のバージョン")
 
 add_compile_options(
@@ -166,6 +166,7 @@ target_sources(shiguredo-mp4
     src/box_header.cpp
     src/box_type.cpp
     src/box_types.cpp
+    src/box/av1c.cpp
     src/box/avc.cpp
     src/box/btrt.cpp
     src/box/co64.cpp
@@ -238,11 +239,13 @@ target_sources(shiguredo-mp4
     src/time/time.cpp
     src/track/track.cpp
     src/track/aac.cpp
+    src/track/av1.cpp
     src/track/mp3.cpp
     src/track/opus.cpp
     src/track/soun.cpp
     src/track/vide.cpp
     src/track/vpx.cpp
+    src/version.cpp
     src/writer/writer.cpp
     src/writer/simple_writer.cpp
     src/writer/faststart_writer.cpp

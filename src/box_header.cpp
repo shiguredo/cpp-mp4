@@ -16,7 +16,7 @@
 namespace shiguredo::mp4 {
 
 BoxHeader* read_box_header(std::istream& is) {
-  std::uint64_t offset = static_cast<std::uint64_t>(is.tellg());
+  const std::uint64_t offset = static_cast<std::uint64_t>(is.tellg());
   if (!is.good()) {
     throw std::runtime_error(fmt::format("read_box_header(): istream::tellg() failed: rdstate={}", is.rdstate()));
   }
@@ -24,7 +24,7 @@ BoxHeader* read_box_header(std::istream& is) {
   if (!is.good()) {
     throw std::runtime_error(fmt::format("read_box_header(): istream::seekg() failed: rdstate={}", is.rdstate()));
   }
-  auto offset_eof = static_cast<std::uint64_t>(is.tellg());
+  const auto offset_eof = static_cast<std::uint64_t>(is.tellg());
   if (!is.good()) {
     throw std::runtime_error(fmt::format("read_box_header(): istream::tellg() failed: rdstate={}", is.rdstate()));
   }
@@ -88,7 +88,7 @@ std::uint64_t BoxHeader::write(std::ostream& os) {
     data[3] = 0;
   } else if (m_size <= std::numeric_limits<std::uint32_t>::max() && m_header_size != Constants::LARGE_HEADER_SIZE) {
     data.resize(Constants::SMALL_HEADER_SIZE);
-    auto a = endian::uint32_to_be(static_cast<uint32_t>(m_size));
+    auto a = endian::uint32_to_be(static_cast<std::uint32_t>(m_size));
     std::copy(std::begin(a), std::end(a), std::begin(data));
   } else {
     data.resize(Constants::LARGE_HEADER_SIZE);
@@ -99,7 +99,7 @@ std::uint64_t BoxHeader::write(std::ostream& os) {
     auto a = endian::uint64_to_be(m_size);
     std::copy(std::begin(a), std::end(a), std::begin(data) + 8);
   }
-  auto type_data = m_type.getData();
+  const auto type_data = m_type.getData();
   data[4] = type_data[0];
   data[5] = type_data[1];
   data[6] = type_data[2];

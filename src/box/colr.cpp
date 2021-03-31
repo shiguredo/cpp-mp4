@@ -91,8 +91,7 @@ std::uint64_t Colr::nclxMarshal(bitio::Writer* writer) const {
 
 std::uint64_t Colr::readData(std::istream& is) {
   bitio::Reader reader(is);
-  std::uint64_t rbits = 0;
-  rbits += bitio::read_uint<std::uint8_t>(&reader, &m_colour_type[0]);
+  std::uint64_t rbits = bitio::read_uint<std::uint8_t>(&reader, &m_colour_type[0]);
   rbits += bitio::read_uint<std::uint8_t>(&reader, &m_colour_type[1]);
   rbits += bitio::read_uint<std::uint8_t>(&reader, &m_colour_type[2]);
   rbits += bitio::read_uint<std::uint8_t>(&reader, &m_colour_type[3]);
@@ -101,7 +100,7 @@ std::uint64_t Colr::readData(std::istream& is) {
     return rbits + nclxUnwriteData(&reader);
   }
 
-  auto offset_to_end = static_cast<std::size_t>(shiguredo::mp4::stream::get_istream_offset_to_end(is));
+  const auto offset_to_end = static_cast<std::size_t>(shiguredo::mp4::stream::get_istream_offset_to_end(is));
 
   if (m_colour_type == std::array<std::uint8_t, 4>{'r', 'I', 'C', 'C'} ||
       m_colour_type == std::array<std::uint8_t, 4>{'p', 'r', 'o', 'f'}) {
@@ -112,8 +111,7 @@ std::uint64_t Colr::readData(std::istream& is) {
 }
 
 std::uint64_t Colr::nclxUnwriteData(bitio::Reader* reader) {
-  std::uint64_t rbits = 0;
-  rbits += bitio::read_uint<std::uint16_t>(reader, &m_colour_primaries);
+  std::uint64_t rbits = bitio::read_uint<std::uint16_t>(reader, &m_colour_primaries);
   rbits += bitio::read_uint<std::uint16_t>(reader, &m_transfer_characteristics);
   rbits += bitio::read_uint<std::uint16_t>(reader, &m_matrix_coefficents);
   rbits += read_bool(reader, &m_full_range_flag);

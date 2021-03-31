@@ -54,8 +54,8 @@ std::uint64_t Urn::readData(std::istream& is) {
   if (checkFlag(UrnSelfContainedFlags)) {
     return rbits;
   }
-  auto offset_to_end = static_cast<std::uint64_t>(shiguredo::mp4::stream::get_istream_offset_to_end(is));
-  auto name_rbits = bitio::read_string(&reader, &m_name, (offset_to_end - 1) * 8);
+  const auto offset_to_end = static_cast<std::uint64_t>(shiguredo::mp4::stream::get_istream_offset_to_end(is));
+  const auto name_rbits = bitio::read_string(&reader, &m_name, (offset_to_end - 1) * 8);
   rbits += name_rbits;
   rbits += bitio::read_string(&reader, &m_location, offset_to_end * 8 - name_rbits);
   return rbits;
