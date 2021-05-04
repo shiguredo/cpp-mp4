@@ -2,7 +2,6 @@
 
 #include <fmt/core.h>
 #include <fmt/ranges.h>
-#include <ext/alloc_traits.h>
 
 #include <algorithm>
 #include <cstddef>

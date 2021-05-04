@@ -1,6 +1,5 @@
 #include "shiguredo/mp4/box/sample_entry.hpp"
 
-#include <bits/exception.h>
 #include <fmt/core.h>
 #include <fmt/ranges.h>
 #include <spdlog/spdlog.h>
