@@ -38,6 +38,28 @@ std::array<std::uint8_t, 4> BoxType::getData() const {
   return m_data;
 }
 
+bool BoxType::operator<(const BoxType& r) const {
+  auto r_data = r.getData();
+  for (std::size_t i = 0; i < m_data.size(); i++)
+  {
+    if (m_data[i] < r_data[i]) {
+      return true;
+    }
+  }
+  return false;
+}
+
+bool BoxType::operator==(const BoxType& r) const {
+  auto r_data = r.getData();
+  for (std::size_t i = 0; i < m_data.size(); i++)
+  {
+    if (m_data[i] != r_data[i]) {
+      return false;
+    }
+  }
+  return true;
+}
+
 std::string BoxType::toString() const {
   if (std::all_of(std::begin(m_data), std::end(m_data),
                   [](const std::uint8_t ch) { return std::isprint(ch) != 0 || ch == 0xa9; })) {
