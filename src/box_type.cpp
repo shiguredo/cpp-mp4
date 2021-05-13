@@ -40,7 +40,7 @@ std::array<std::uint8_t, 4> BoxType::getData() const {
 
 bool BoxType::operator<(const BoxType& r) const {
   auto r_data = r.getData();
-  for (std::size_t i = 0; i < m_data.size(); i++)
+  for (std::size_t i = 0; i < std::size(m_data); i++)
   {
     if (m_data[i] < r_data[i]) {
       return true;
@@ -51,7 +51,7 @@ bool BoxType::operator<(const BoxType& r) const {
 
 bool BoxType::operator==(const BoxType& r) const {
   auto r_data = r.getData();
-  for (std::size_t i = 0; i < m_data.size(); i++)
+  for (std::size_t i = 0; i < std::size(m_data); i++)
   {
     if (m_data[i] != r_data[i]) {
       return false;
