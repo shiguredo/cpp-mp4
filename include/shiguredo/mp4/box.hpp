@@ -43,7 +43,9 @@ class Box {
   void seekToEnd(std::istream& is);
   void setOffsetAndDataSize(const std::uint64_t, const std::uint64_t);
 
+#if __cplusplus >= 202002L
   auto operator<=>(const Box&) const = default;
+#endif
 
  protected:
   BoxType m_type;
@@ -67,7 +69,9 @@ class FullBox : public Box {
   std::uint64_t readVersionAndFlag(bitio::Reader*);
   std::uint64_t getDataSize() const override;
 
+#if __cplusplus >= 202002L
   auto operator<=>(const FullBox&) const = default;
+#endif
 
  protected:
   std::uint8_t m_version = 0;
@@ -79,7 +83,9 @@ class AnyTypeBox : public Box {
   void setType(const BoxType&);
   BoxType getType() const;
 
+#if __cplusplus >= 202002L
   auto operator<=>(const AnyTypeBox&) const = default;
+#endif
 };
 
 }  // namespace shiguredo::mp4
