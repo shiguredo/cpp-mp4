@@ -204,4 +204,3 @@ std::filesystem::path FaststartWriter::getIntermediateFilePath() {
 }
 
 }  // namespace shiguredo::mp4::writer
-
