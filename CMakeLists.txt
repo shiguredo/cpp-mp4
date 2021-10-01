@@ -12,7 +12,7 @@ include(cmake/env.cmake)
 include(cmake/tools.cmake)
 
 set_cache_string_from_env(BOOST_VERSION 1.77.0 "Boost のバージョン")
-set_cache_string_from_env(CLI11_VERSION 1.9.1 "CLI11 のバージョン")
+set_cache_string_from_env(CLI11_VERSION 2.1.1 "CLI11 のバージョン")
 set_cache_string_from_env(FMT_VERSION 7.1.3 "fmt のバージョン")
 set_cache_string_from_env(RAPIDCSV_VERSION 8.48 "rapidcsv のバージョン")
 set_cache_string_from_env(SPDLOG_VERSION 1.8.2 "spdlog のバージョン")
