@@ -12,6 +12,14 @@
 
 ## develop
 
+- [UPDATE] 依存ライブラリの更新
+    - `boost` を `1.77.0` に
+    - `CLI11` を `2.1.1` に
+    - `fmt` を `8.0.1` に
+    - `spdlog` を `1.9.2` に
+    - `rapidcsv` を `8.53` に
+    - @haruyama
+
 ## 2021.3
 
 - [UPDATE] `boost` を `1.76.0` に
