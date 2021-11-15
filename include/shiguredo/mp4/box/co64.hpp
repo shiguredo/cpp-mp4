@@ -29,7 +29,9 @@ class Co64 : public FullBox {
   std::uint64_t readData(std::istream& is) override;
   std::uint64_t getDataSize() const override;
 
+#if __cplusplus >= 202002L
   auto operator<=>(const Co64&) const = default;
+#endif
 
  private:
   std::vector<std::uint64_t> m_chunk_offsets;

@@ -32,7 +32,9 @@ class StscEntry {
 
   std::uint64_t writeData(bitio::Writer*) const;
   std::uint64_t readData(bitio::Reader*);
+#if __cplusplus >= 202002L
   auto operator<=>(const StscEntry&) const = default;
+#endif
 
  private:
   std::uint32_t m_first_chunk;

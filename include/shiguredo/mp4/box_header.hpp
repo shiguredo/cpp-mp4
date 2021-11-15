@@ -27,7 +27,9 @@ class BoxHeader {
   void seekToData(std::istream& is);
   void seekToEnd(std::istream& is);
 
+#if __cplusplus >= 202002L
   auto operator<=>(const BoxHeader&) const = default;
+#endif
 
   std::uint64_t getOffset() const;
   std::uint64_t getSize() const;

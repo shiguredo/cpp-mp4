@@ -38,6 +38,14 @@ std::array<std::uint8_t, 4> BoxType::getData() const {
   return m_data;
 }
 
+bool BoxType::operator<(const BoxType& r) const {
+  return m_data < r.getData();
+}
+
+bool BoxType::operator==(const BoxType& r) const {
+  return m_data == r.getData();
+}
+
 std::string BoxType::toString() const {
   if (std::all_of(std::begin(m_data), std::end(m_data),
                   [](const std::uint8_t ch) { return std::isprint(ch) != 0 || ch == 0xa9; })) {

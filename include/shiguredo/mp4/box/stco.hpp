@@ -29,7 +29,9 @@ class Stco : public FullBox {
   std::uint64_t readData(std::istream&) override;
   std::uint64_t getDataSize() const override;
 
+#if __cplusplus >= 202002L
   auto operator<=>(const Stco&) const = default;
+#endif
 
  private:
   std::vector<std::uint32_t> m_chunk_offsets;

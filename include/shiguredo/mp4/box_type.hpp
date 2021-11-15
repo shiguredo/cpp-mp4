@@ -1,6 +1,7 @@
 #pragma once
 
 #include <array>
+#include <compare>
 #include <cstdint>
 #include <string>
 
@@ -15,7 +16,11 @@ class BoxType {
   void setData(const std::uint8_t, const std::uint8_t, const std::uint8_t, const std::uint8_t);
 
   std::array<std::uint8_t, 4> getData() const;
+#if __cplusplus >= 202002L
   auto operator<=>(const BoxType&) const = default;
+#endif
+  bool operator<(const BoxType&) const;
+  bool operator==(const BoxType&) const;
 
   std::string toString() const;
   bool matchWith(const BoxType& other) const;
