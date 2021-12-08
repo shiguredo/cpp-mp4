@@ -19,6 +19,10 @@
     - `spdlog` を `1.9.2` に
     - `rapidcsv` を `8.53` に
     - @haruyama
+- [FIX] 宇宙船演算子を利用している箇所に #include <compare> を追加
+    - @haruyama
+    - https://github.com/shiguredo/cpp-mp4/pull/12
+
 
 ## 2021.3
 

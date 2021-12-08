@@ -1,6 +1,7 @@
 #pragma once
 
 #include <array>
+#include <compare>  // NOLINT
 #include <cstdint>
 #include <istream>
 #include <string>
