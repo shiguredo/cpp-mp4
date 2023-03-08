@@ -36,7 +36,7 @@ BoxTypesTestCase box_test_cases[] = {
      new shiguredo::mp4::box::Colr({.colour_type = {'n', 'c', 'l', 'x'},
                                     .colour_primaries = 0x0123,
                                     .transfer_characteristics = 0x2345,
-                                    .matrix_coefficents = 0x4567,
+                                    .matrix_coefficients = 0x4567,
                                     .full_range_flag = true}),
      new shiguredo::mp4::box::Colr(),
      {
@@ -1977,11 +1977,11 @@ BoxTypesTestCase box_test_cases[] = {
                                                     .video_full_range_flag = 0,
                                                     .colour_primaries = 0xff,
                                                     .transfer_characteristics = 0xff,
-                                                    .matrix_coefficents = 0}),
+                                                    .matrix_coefficients = 0}),
      new shiguredo::mp4::box::VPCodecConfiguration(),
      {0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0xff, 0xff, 0x00, 0x00, 0x00},
      "Version=1 Flags=0x000000 Profile=0 Level=0 BitDepth=8 ChromaSubSampling=0 VideoFullRangeFlag=0 "
-     "ColourPrimaries=255 TransferCharacteristics=255 MatrixCoefficents=0 CodecInitializationData=[]"},
+     "ColourPrimaries=255 TransferCharacteristics=255 MatrixCoefficients=0 CodecInitializationData=[]"},
     {"vpcC version: 0",
      new shiguredo::mp4::box::VPCodecConfiguration({.version = 0,
                                                     .profile = 0,
@@ -1991,11 +1991,11 @@ BoxTypesTestCase box_test_cases[] = {
                                                     .video_full_range_flag = 0,
                                                     .colour_primaries = 0xff,
                                                     .transfer_characteristics = 0xff,
-                                                    .matrix_coefficents = 0}),
+                                                    .matrix_coefficients = 0}),
      new shiguredo::mp4::box::VPCodecConfiguration(),
      {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0xff, 0xff, 0x00},
      "Version=0 Flags=0x000000 Profile=0 Level=0 BitDepth=8 ChromaSubSampling=0 VideoFullRangeFlag=0 "
-     "ColourPrimaries=255 TransferCharacteristics=255 MatrixCoefficents=0 CodecInitializationData=[]"},
+     "ColourPrimaries=255 TransferCharacteristics=255 MatrixCoefficients=0 CodecInitializationData=[]"},
     {
         "sdtp",
         new shiguredo::mp4::box::Sdtp({.samples =

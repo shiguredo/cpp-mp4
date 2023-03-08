@@ -20,7 +20,7 @@ struct VPCodecConfigurationParameters {
   const std::uint8_t video_full_range_flag = 0;
   const std::uint8_t colour_primaries = 2;
   const std::uint8_t transfer_characteristics = 2;
-  const std::uint8_t matrix_coefficents = 2;
+  const std::uint8_t matrix_coefficients = 2;
   const std::vector<std::uint8_t> codec_initialization_data = {};
 };
 
@@ -45,7 +45,7 @@ class VPCodecConfiguration : public FullBox {
   std::uint8_t m_video_full_range_flag;
   std::uint8_t m_colour_primaries;
   std::uint8_t m_transfer_characteristics;
-  std::uint8_t m_matrix_coefficents;
+  std::uint8_t m_matrix_coefficients;
   std::vector<std::uint8_t> m_codec_initialization_data;
 };
 
