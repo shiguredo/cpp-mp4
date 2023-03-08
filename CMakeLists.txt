@@ -180,6 +180,7 @@ target_sources(shiguredo-mp4
     src/box/elst.cpp
     src/box/emsg.cpp
     src/box/esds.cpp
+    src/box/fiel.cpp
     src/box/free.cpp
     src/box/ftyp.cpp
     src/box/hdlr.cpp

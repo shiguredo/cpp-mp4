@@ -14,6 +14,7 @@
 #include "shiguredo/mp4/box/elst.hpp"
 #include "shiguredo/mp4/box/emsg.hpp"
 #include "shiguredo/mp4/box/esds.hpp"
+#include "shiguredo/mp4/box/fiel.hpp"
 #include "shiguredo/mp4/box/free.hpp"
 #include "shiguredo/mp4/box/ftyp.hpp"
 #include "shiguredo/mp4/box/hdlr.hpp"
