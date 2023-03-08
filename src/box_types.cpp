@@ -23,6 +23,7 @@ void register_box_map(BoxMap* boxMap) {
   boxMap->addBoxDef(boost::factory<box::Elst*>(), BoxType("elst"), {0, 1});
   boxMap->addBoxDef(boost::factory<box::Emsg*>(), BoxType("emsg"), {0, 1});
   boxMap->addBoxDef(boost::factory<box::Esds*>(), BoxType("esds"), {0});
+  boxMap->addBoxDef(boost::factory<box::Fiel*>(), BoxType("fiel"), {});
   boxMap->addBoxDef(boost::factory<box::Free*>(), BoxType("free"), {});
   boxMap->addBoxDef(boost::factory<box::Ftyp*>(), BoxType("ftyp"), {});
   boxMap->addBoxDef(boost::factory<box::Hdlr*>(), BoxType("hdlr"), {0});
