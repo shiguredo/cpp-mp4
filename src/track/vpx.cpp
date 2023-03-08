@@ -35,6 +35,7 @@ void VPXTrack::makeStsdBoxInfo(BoxInfo* stbl) {
                                .height = static_cast<std::uint16_t>(m_height),
                            })});
   new BoxInfo({.parent = vp0x, .box = new box::VPCodecConfiguration({.version = 1, .level = 21})});
+  new BoxInfo({.parent = vp0x, .box = new box::Fiel({.field_count = 1, .field_ordering = 0})});
   new BoxInfo({.parent = vp0x, .box = new box::PixelAspectRatio({.h_spacing = 1})});
 }
 
