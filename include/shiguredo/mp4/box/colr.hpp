@@ -22,7 +22,7 @@ struct ColrParameters {
   const std::array<std::uint8_t, 4> colour_type;
   const std::uint16_t colour_primaries;
   const std::uint16_t transfer_characteristics;
-  const std::uint16_t matrix_coefficents;
+  const std::uint16_t matrix_coefficients;
   const bool full_range_flag;
   const std::vector<std::uint8_t> profile = {};
   const std::vector<std::uint8_t> unknown = {};
@@ -45,7 +45,7 @@ class Colr : public Box {
   std::array<std::uint8_t, 4> m_colour_type;
   std::uint16_t m_colour_primaries;
   std::uint16_t m_transfer_characteristics;
-  std::uint16_t m_matrix_coefficents;
+  std::uint16_t m_matrix_coefficients;
   bool m_full_range_flag;
   std::uint8_t m_reserved = 0;
   std::vector<std::uint8_t> m_profile;

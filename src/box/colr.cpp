@@ -26,7 +26,7 @@ Colr::Colr(const ColrParameters& params)
     : m_colour_type(params.colour_type),
       m_colour_primaries(params.colour_primaries),
       m_transfer_characteristics(params.transfer_characteristics),
-      m_matrix_coefficents(params.matrix_coefficents),
+      m_matrix_coefficients(params.matrix_coefficients),
       m_full_range_flag(params.full_range_flag),
       m_profile(params.profile),
       m_unknown(params.unknown) {
@@ -50,7 +50,7 @@ std::string Colr::nclxToString() const {
       "TransferCharacteristics={} "
       "MatrixCoefficients={} FullRangeFlag={}",
       m_colour_type[0], m_colour_type[1], m_colour_type[2], m_colour_type[3], m_colour_primaries,
-      m_transfer_characteristics, m_matrix_coefficents, m_full_range_flag);
+      m_transfer_characteristics, m_matrix_coefficients, m_full_range_flag);
 }
 
 std::string Colr::profileToString() const {
@@ -83,7 +83,7 @@ std::uint64_t Colr::nclxMarshal(bitio::Writer* writer) const {
   std::uint64_t wbits = 0;
   wbits += bitio::write_uint<std::uint16_t>(writer, m_colour_primaries);
   wbits += bitio::write_uint<std::uint16_t>(writer, m_transfer_characteristics);
-  wbits += bitio::write_uint<std::uint16_t>(writer, m_matrix_coefficents);
+  wbits += bitio::write_uint<std::uint16_t>(writer, m_matrix_coefficients);
   wbits += write_bool(writer, m_full_range_flag);
   wbits += bitio::write_uint<std::uint8_t>(writer, m_reserved, 7);
   return wbits;
@@ -113,7 +113,7 @@ std::uint64_t Colr::readData(std::istream& is) {
 std::uint64_t Colr::nclxUnwriteData(bitio::Reader* reader) {
   std::uint64_t rbits = bitio::read_uint<std::uint16_t>(reader, &m_colour_primaries);
   rbits += bitio::read_uint<std::uint16_t>(reader, &m_transfer_characteristics);
-  rbits += bitio::read_uint<std::uint16_t>(reader, &m_matrix_coefficents);
+  rbits += bitio::read_uint<std::uint16_t>(reader, &m_matrix_coefficients);
   rbits += read_bool(reader, &m_full_range_flag);
   rbits += bitio::read_uint<std::uint8_t>(reader, &m_reserved, 7);
   return rbits;

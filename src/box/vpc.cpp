@@ -26,9 +26,9 @@ VPCodecConfiguration::VPCodecConfiguration() {
 std::string VPCodecConfiguration::toStringOnlyData() const {
   return fmt::format(
       "{} Profile={} Level={} BitDepth={} ChromaSubSampling={} VideoFullRangeFlag={} ColourPrimaries={} "
-      "TransferCharacteristics={} MatrixCoefficents={} CodecInitializationData=[{:#x}]",
+      "TransferCharacteristics={} MatrixCoefficients={} CodecInitializationData=[{:#x}]",
       getVersionAndFlagsString(), m_profile, m_level, m_bit_depth, m_chroma_sub_sampling, m_video_full_range_flag,
-      m_colour_primaries, m_transfer_characteristics, m_matrix_coefficents,
+      m_colour_primaries, m_transfer_characteristics, m_matrix_coefficients,
       fmt::join(m_codec_initialization_data, ", "));
 }
 
@@ -42,7 +42,7 @@ std::uint64_t VPCodecConfiguration::writeData(std::ostream& os) const {
   wbits += bitio::write_uint<std::uint8_t>(&writer, m_video_full_range_flag, 1);
   wbits += bitio::write_uint<std::uint8_t>(&writer, m_colour_primaries);
   wbits += bitio::write_uint<std::uint8_t>(&writer, m_transfer_characteristics);
-  wbits += bitio::write_uint<std::uint8_t>(&writer, m_matrix_coefficents);
+  wbits += bitio::write_uint<std::uint8_t>(&writer, m_matrix_coefficients);
   if (m_version == 0) {
     return wbits;
   }
@@ -68,7 +68,7 @@ std::uint64_t VPCodecConfiguration::readData(std::istream& is) {
   rbits += bitio::read_uint<std::uint8_t>(&reader, &m_video_full_range_flag, 1);
   rbits += bitio::read_uint<std::uint8_t>(&reader, &m_colour_primaries);
   rbits += bitio::read_uint<std::uint8_t>(&reader, &m_transfer_characteristics);
-  rbits += bitio::read_uint<std::uint8_t>(&reader, &m_matrix_coefficents);
+  rbits += bitio::read_uint<std::uint8_t>(&reader, &m_matrix_coefficients);
   if (m_version == 0) {
     return rbits;
   }
@@ -86,7 +86,7 @@ VPCodecConfiguration::VPCodecConfiguration(const VPCodecConfigurationParameters&
       m_video_full_range_flag(params.video_full_range_flag),
       m_colour_primaries(params.colour_primaries),
       m_transfer_characteristics(params.transfer_characteristics),
-      m_matrix_coefficents(params.matrix_coefficents),
+      m_matrix_coefficients(params.matrix_coefficients),
       m_codec_initialization_data(params.codec_initialization_data) {
   setVersion(params.version);
   setFlags(params.flags);
