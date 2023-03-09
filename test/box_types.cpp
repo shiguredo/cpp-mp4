@@ -333,28 +333,28 @@ BoxTypesTestCase box_test_cases[] = {
             0,                 // version
             0x00, 0x00, 0x00,  // flags
             //
-            0x03,        // tag
-            0x2a,        // size (varint)
-            0x12, 0x34,  // esid
-            0x43,        // flags & streamPriority
-            11,          // urlLength
+            0x03,                    // tag
+            0x80, 0x80, 0x80, 0x2a,  // size (varint)
+            0x12, 0x34,              // esid
+            0x43,                    // flags & streamPriority
+            11,                      // urlLength
             'h', 't', 't', 'p', ':', '/', '/', 'h', 'o', 'g',
             'e',                     // urlString
                                      //
             0x04,                    // tag
-            0x0d,                    // size (varint)
+            0x80, 0x80, 0x80, 0x0d,  // size (varint)
             0x12,                    // objectTypeIndication
             0x56,                    // streamType & upStream & reserved
             0x12, 0x34, 0x56,        // bufferSizeDB
             0x12, 0x34, 0x56, 0x78,  // maxBitrate
             0x23, 0x45, 0x67, 0x89,  // avgBitrate
             //
-            0x05,              // tag
-            0x03,              // size (varint)
-            0x11, 0x22, 0x33,  // data
+            0x05,                    // tag
+            0x80, 0x80, 0x80, 0x03,  // size (varint)
+            0x11, 0x22, 0x33,        // data
             //
             0x06,                          // tag
-            0x05,                          // size (varint)
+            0x80, 0x80, 0x80, 0x05,        // size (varint)
             0x11, 0x22, 0x33, 0x44, 0x55,  // data
         },
         "Version=0 Flags=0x000000 Descriptors=[{Tag=ESDescr "
@@ -1965,7 +1965,7 @@ BoxTypesTestCase box_test_cases[] = {
                                     .video_profile_level = 0xff,
                                     .graphics_profile_level = 0xff}),
      new shiguredo::mp4::box::Iods(),
-     {0x00, 0x00, 0x00, 0x00, 0x10, 0x07, 0x00, 0x4f, 0xff, 0xff, 0xfe, 0xff, 0xff},
+     {0x00, 0x00, 0x00, 0x00, 0x10, 0x80, 0x80, 0x80, 0x07, 0x00, 0x4f, 0xff, 0xff, 0xfe, 0xff, 0xff},
      "Version=0 Flags=0x000000 TypeTag=0x10 ODID=79 ODProfileLevel=0xff SceneProfileLevel=0xff "
      "AudioProfileLevel=0xfe "
      "VideoProfileLevel=0xff GraphicsProfileLevel=0xff"},
