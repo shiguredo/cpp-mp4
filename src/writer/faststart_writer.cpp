@@ -45,6 +45,9 @@ FaststartWriter::FaststartWriter(std::ostream& t_os, const FaststartWriterParame
         fmt::format("FaststartWriter::FaststartWriter(): cannot open an intermediate file: fdopen(), m_mdat_path={}",
                     m_mdat_path.string()));
   }
+  if (params.write_free_box_after_moov) {
+    m_free_size = 8;
+  }
 }
 
 void FaststartWriter::recreateMoovBoxInfo() {
@@ -72,8 +75,20 @@ void FaststartWriter::writeFtypBox() {
   delete ftyp;
 }
 
-void FaststartWriter::writeMdatHeader() {
+void FaststartWriter::writeFreeBoxAfterMoovBox() {
+  if (m_free_size == 0) {
+    return;
+  }
+  BoxInfo* free = new BoxInfo({.box = new box::Free()});
   const std::uint64_t offset = getFtypSize() + getMoovSize();
+  free->adjustOffsetAndSize(offset);
+  m_os.seekp(static_cast<std::streamoff>(offset), std::ios_base::beg);
+  free->write(m_os);
+  delete free;
+}
+
+void FaststartWriter::writeMdatHeader() {
+  const std::uint64_t offset = getFtypSize() + getMoovSize() + m_free_size;
   m_os.seekp(static_cast<std::streamoff>(offset), std::ios_base::beg);
   if (!m_os.good()) {
     throw std::runtime_error(
@@ -122,6 +137,8 @@ void FaststartWriter::writeMoovBox() {
   m_mvhd_box->setNextTrackID(m_next_track_id);
 
   m_moov_box_info->write(m_os);
+
+  writeFreeBoxAfterMoovBox();
 }
 
 std::uint64_t FaststartWriter::getFtypSize() const {
@@ -167,11 +184,11 @@ void FaststartWriter::copyMdatData() {
 
 void FaststartWriter::appendTrakAndUdtaBoxInfo(const std::vector<shiguredo::mp4::track::Track*>& tracks) {
   std::uint64_t prev_size = 0;
-  std::uint64_t size = getFtypSize() + getMoovSize() + getMdatHeaderSize();
+  std::uint64_t size = getFtypSize() + getMoovSize() + getMdatHeaderSize() + m_free_size;
   spdlog::trace("FaststartWriter::appendTrakAndUdtaBoxInfo()");
   do {
-    spdlog::trace("  FaststartWriter::appendTrakAndUdtaBoxInfo(): size: {} {} {}", getFtypSize(), getMoovSize(),
-                  getMdatHeaderSize());
+    spdlog::trace("  FaststartWriter::appendTrakAndUdtaBoxInfo(): size: {} {} {} {}", getFtypSize(), getMoovSize(),
+                  getMdatHeaderSize(), m_free_size);
     recreateMoovBoxInfo();
     auto diff = size - prev_size;
     spdlog::trace("  FaststartWriter::appendTrakAndUdtaBoxInfo(): diff: {} {} {}", size, prev_size, diff);
@@ -182,9 +199,9 @@ void FaststartWriter::appendTrakAndUdtaBoxInfo(const std::vector<shiguredo::mp4:
     appendUdtaBoxInfo();
     prev_size = size;
     setOffsetAndSize();
-    spdlog::trace("  FaststartWriter::appendTrakAndUdtaBoxInfo(): size(2): {} {} {}", getFtypSize(), getMoovSize(),
-                  getMdatHeaderSize());
-    size = getFtypSize() + getMoovSize() + getMdatHeaderSize();
+    spdlog::trace("  FaststartWriter::appendTrakAndUdtaBoxInfo(): size(2): {} {} {} {}", getFtypSize(), getMoovSize(),
+                  getMdatHeaderSize(), m_free_size);
+    size = getFtypSize() + getMoovSize() + getMdatHeaderSize() + m_free_size;
     if (size < prev_size) {
       throw std::runtime_error(fmt::format(
           "FaststartWriter::appendTrakAndUdtaBoxInfo(): shrink moov size: prev_size={} size={}", prev_size, size));
