@@ -55,6 +55,9 @@ void AACTrack::makeStsdBoxInfo(BoxInfo* stbl) {
   esd->addSubDescriptor(dsi);
   esd->addSubDescriptor(scd);
   new BoxInfo({.parent = mp4a, .box = new box::Esds({.descriptors = {esd, dcd, dsi, scd}})});
+  new BoxInfo(
+      {.parent = mp4a,
+       .box = new box::Btrt({.decoding_buffer_size = 0, .max_bitrate = m_max_bitrate, .avg_bitrate = m_avg_bitrate})});
 }
 
 void AACTrack::appendTrakBoxInfo(BoxInfo* moov) {
