@@ -138,37 +138,22 @@ std::uint64_t read_vector_uint(Reader* reader, const std::size_t size, std::vect
 
 template <typename T>
 std::uint64_t uvarint_size(const T u) {
-  std::uint64_t val = static_cast<std::uint64_t>(u);
-  for (std::int8_t i = 63; i >= 0; i -= 7) {
-    std::uint8_t data = static_cast<std::uint8_t>((val >> i) & 0x7f);
-    if (data != 0) {
-      return static_cast<std::uint64_t>((i / 7) + 1);
-    }
-  }
-  return 1;
+  return sizeof(u);
 }
 
 template <typename T>
 std::uint64_t write_uvarint(Writer* writer, const T u) {
-  if (u == 0) {
-    std::vector<std::uint8_t> v{0};
-    writer->writeBits(v, 8);
-    return 8;
-  }
-  std::uint64_t wbits = 0;
   std::uint64_t val = static_cast<std::uint64_t>(u);
-  for (std::int8_t i = 63; i >= 0; i -= 7) {
+  for (std::int8_t i = 7 * (sizeof(u) - 1); i >= 0; i -= 7) {
     std::uint8_t data = static_cast<std::uint8_t>((val >> i) & 0x7f);
-    if ((data != 0) || (wbits > 0)) {
-      if (i != 0) {
-        data |= 0x80;
-      }
-      std::vector<std::uint8_t> v{data};
-      writer->writeBits(v, 8);
-      wbits += 8;
+    if (i > 0) {
+      data |= 0x80;
     }
+    std::vector<std::uint8_t> v{data};
+    writer->writeBits(v, 8);
   }
-  return wbits;
+
+  return sizeof(u) * 8;
 }
 
 template <typename T>
