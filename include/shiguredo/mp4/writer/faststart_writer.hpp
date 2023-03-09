@@ -27,6 +27,7 @@ struct FaststartWriterParameters {
   const box::FtypParameters ftyp_params{.major_brand = BrandIsom,
                                         .minor_version = 512,
                                         .compatible_brands = {BrandIsom, BrandIso2, BrandMp41}};
+  const bool write_free_box_after_moov = true;
 };
 
 class FaststartWriter : public Writer {
@@ -50,6 +51,7 @@ class FaststartWriter : public Writer {
   const box::FtypParameters m_ftyp_params;
   std::filesystem::path m_mdat_path;
   std::FILE* m_mdat_fd;
+  std::uint64_t m_free_size = 0;
 
   void setOffsetAndSize() override;
 
@@ -57,6 +59,7 @@ class FaststartWriter : public Writer {
   std::uint64_t getFtypSize() const;
   std::uint64_t getMoovSize() const;
   std::uint64_t getMdatHeaderSize() const;
+  void writeFreeBoxAfterMoovBox();
 };
 
 }  // namespace shiguredo::mp4::writer
