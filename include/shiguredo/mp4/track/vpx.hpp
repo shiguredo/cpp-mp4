@@ -31,6 +31,8 @@ struct VPXTrackParameters {
   const std::uint32_t track_id = 0;
   const std::uint32_t width;
   const std::uint32_t height;
+  const std::uint32_t max_bitrate = 0;
+  const std::uint32_t avg_bitrate = 0;
   shiguredo::mp4::writer::Writer* writer;
 };
 

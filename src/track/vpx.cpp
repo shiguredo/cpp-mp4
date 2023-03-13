@@ -22,6 +22,8 @@ VPXTrack::VPXTrack(const VPXTrackParameters& params) : m_codec(params.codec) {
   m_width = params.width;
   m_height = params.height;
   m_writer = params.writer;
+  m_max_bitrate = params.max_bitrate;
+  m_avg_bitrate = params.avg_bitrate;
 }
 
 void VPXTrack::makeStsdBoxInfo(BoxInfo* stbl) {
@@ -37,6 +39,9 @@ void VPXTrack::makeStsdBoxInfo(BoxInfo* stbl) {
   new BoxInfo({.parent = vp0x, .box = new box::VPCodecConfiguration({.version = 1, .level = 21})});
   new BoxInfo({.parent = vp0x, .box = new box::Fiel({.field_count = 1, .field_ordering = 0})});
   new BoxInfo({.parent = vp0x, .box = new box::PixelAspectRatio({.h_spacing = 1})});
+  new BoxInfo(
+      {.parent = vp0x,
+       .box = new box::Btrt({.decoding_buffer_size = 0, .max_bitrate = m_max_bitrate, .avg_bitrate = m_avg_bitrate})});
 }
 
 void VPXTrack::appendTrakBoxInfo(BoxInfo* moov) {
