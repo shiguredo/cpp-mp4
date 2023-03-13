@@ -144,7 +144,7 @@ std::uint64_t uvarint_size(const T u) {
 template <typename T>
 std::uint64_t write_uvarint(Writer* writer, const T u) {
   std::uint64_t val = static_cast<std::uint64_t>(u);
-  for (std::int8_t i = 21; i >= 0; i -= 7) {
+  for (std::int8_t i = 7 * (sizeof(u) - 1); i >= 0; i -= 7) {
     std::uint8_t data = static_cast<std::uint8_t>((val >> i) & 0x7f);
     if (i > 0) {
       data |= 0x80;
@@ -153,7 +153,7 @@ std::uint64_t write_uvarint(Writer* writer, const T u) {
     writer->writeBits(v, 8);
   }
 
-  return 4 * 8;
+  return sizeof(u) * 8;
 }
 
 template <typename T>
