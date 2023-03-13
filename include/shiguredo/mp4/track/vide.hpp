@@ -19,6 +19,8 @@ class VideTrack : public Track {
   void makeVmhdBoxInfo(BoxInfo*);
   std::uint32_t m_width;
   std::uint32_t m_height;
+  std::uint32_t m_max_bitrate;
+  std::uint32_t m_avg_bitrate;
 };
 
 }  // namespace shiguredo::mp4::track
