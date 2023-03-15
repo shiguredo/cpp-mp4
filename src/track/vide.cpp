@@ -17,6 +17,7 @@ void VideTrack::makeTkhdBoxInfo(BoxInfo* trak) {
                    .modification_time = m_time_from_epoch,
                    .track_id = m_track_id,
                    .duration = getDurationInMvhdTimescale(),
+                   .alternate_group = 0,
                    .volume = 0,
                    .width = m_width << 16,
                    .height = m_height << 16,

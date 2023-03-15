@@ -41,7 +41,7 @@ class Writer {
   virtual void appendTrakAndUdtaBoxInfo(const std::vector<shiguredo::mp4::track::Track*>&) = 0;
 
   void appendUdtaBoxInfo(const box::DataParameters& data_params = {
-                             .data = {'s', 'h', 'i', 'g', 'u', 'r', 'e', 'd', 'o', ':', ':', 'm', 'p', '4'}});
+                             .data = {'L', 'a', 'v', 'f', '5', '9', '.', '2', '7', '.', '1', '0', '0'}});
   void addBoxesUnderMoov(BoxInfo*);
 
   BoxInfo* getMoovBoxInfo() const;
@@ -52,7 +52,7 @@ class Writer {
  protected:
   std::uint32_t m_mvhd_timescale;
   float m_duration;
-  std::uint64_t m_time_from_epoch;
+  std::uint64_t m_time_from_epoch = 0;
   std::uint64_t m_ftyp_size;
   std::uint64_t m_mdat_data_size = 0;
   std::uint32_t m_next_track_id = 1;

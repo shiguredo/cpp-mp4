@@ -52,7 +52,7 @@ void AACTrack::makeStsdBoxInfo(BoxInfo* stbl) {
   std::shared_ptr<box::ESDescriptor> esd(
       new box::ESDescriptor({.ESID = static_cast<std::uint16_t>(0xffff & m_track_id)}));
   esd->addSubDescriptor(dcd);
-  esd->addSubDescriptor(dsi);
+  dcd->addSubDescriptor(dsi);
   esd->addSubDescriptor(scd);
   new BoxInfo({.parent = mp4a, .box = new box::Esds({.descriptors = {esd, dcd, dsi, scd}})});
   new BoxInfo(

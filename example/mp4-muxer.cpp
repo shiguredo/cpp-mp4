@@ -2,6 +2,7 @@
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/spdlog.h>
 
+#include <algorithm>
 #include <cstddef>
 #include <iostream>
 #include <iterator>
@@ -315,35 +316,40 @@ int main(int argc, char** argv) {
     const float duration = 15.36f;
     shiguredo::mp4::writer::FaststartWriter writer(ofs, {.mvhd_timescale = 1000, .duration = duration});
     writer.writeFtypBox();
-    shiguredo::mp4::track::AACTrack aac_trak({.timescale = 48000,
-                                              .duration = duration,
-                                              .track_id = writer.getAndUpdateNextTrackID(),
-                                              .buffer_size_db = 0,
-                                              .max_bitrate = 64000,
-                                              .avg_bitrate = 64000,
-                                              .writer = &writer});
     shiguredo::mp4::track::VPXTrack vpx_trak({.timescale = 16000,
                                               .duration = duration,
                                               .track_id = writer.getAndUpdateNextTrackID(),
                                               .width = 640,
                                               .height = 240,
-                                              .max_bitrate = 250000,
-                                              .avg_bitrate = 250000,
+                                              .max_bitrate = 196438,
+                                              .avg_bitrate = 196438,
                                               .writer = &writer});
-    for (std::size_t s = 0; s < 16; ++s) {
+    shiguredo::mp4::track::AACTrack aac_trak({.timescale = 48000,
+                                              .duration = duration,
+                                              .track_id = writer.getAndUpdateNextTrackID(),
+                                              .buffer_size_db = 0,
+                                              .max_bitrate = 67509,
+                                              .avg_bitrate = 67509,
+                                              .writer = &writer});
+    std::size_t l = 1;
+    std::size_t a = 0;
+    for (std::size_t s = 0; s < 16 * 3 * 8; ++s) {
       // chunk length: 960 ms
-      for (std::size_t j = 0; j < 45; ++j) {
-        const auto i = s * 45 + j;
-        aac_trak.addMdatData(aac_resources[i].timestamp, aac_resources[i].data, aac_resources[i].is_key);
-      }
-      aac_trak.terminateCurrentChunk();
-      for (std::size_t j = 0; j < 24; ++j) {
-        const auto i = s * 24 + j;
-        vpx_trak.addMdatData(vp9_resources[i].timestamp, vp9_resources[i].data, vp9_resources[i].is_key);
-      }
+      vpx_trak.addMdatData(vp9_resources[s].timestamp, vp9_resources[s].data, vp9_resources[s].is_key);
       vpx_trak.terminateCurrentChunk();
+      if (l % 8 == 0) {
+        aac_trak.addMdatData(aac_resources[a].timestamp, aac_resources[a].data, aac_resources[a].is_key);
+        ++a;
+      } else {
+        aac_trak.addMdatData(aac_resources[a].timestamp, aac_resources[a].data, aac_resources[a].is_key);
+        ++a;
+        aac_trak.addMdatData(aac_resources[a].timestamp, aac_resources[a].data, aac_resources[a].is_key);
+        ++a;
+      }
+      ++l;
+      aac_trak.terminateCurrentChunk();
     }
-    writer.appendTrakAndUdtaBoxInfo({&aac_trak, &vpx_trak});
+    writer.appendTrakAndUdtaBoxInfo({&vpx_trak, &aac_trak});
     writer.writeMoovBox();
     writer.writeMdatHeader();
     writer.copyMdatData();

@@ -26,9 +26,7 @@ FaststartWriter::FaststartWriter(std::ostream& t_os, const FaststartWriterParame
     : m_os(t_os), m_ftyp_params(params.ftyp_params) {
   m_mvhd_timescale = params.mvhd_timescale;
   m_duration = params.duration;
-  std::chrono::system_clock::time_point p = std::chrono::system_clock::now();
-  m_time_from_epoch = time::convert_to_epoch_19040101(
-      static_cast<std::uint64_t>(duration_cast<std::chrono::seconds>(p.time_since_epoch()).count()));
+  m_time_from_epoch = 0;
 
   char* mdat_filename = ::strdup(params.mdat_path_templete.c_str());
   int fd = ::mkstemp(mdat_filename);

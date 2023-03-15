@@ -11,11 +11,14 @@ SounTrack::SounTrack() {
 
 void SounTrack::makeTkhdBoxInfo(BoxInfo* trak) {
   new BoxInfo({.parent = trak,
-               .box = new box::Tkhd({.flags = 0x000003,
-                                     .creation_time = m_time_from_epoch,
-                                     .modification_time = m_time_from_epoch,
-                                     .track_id = m_track_id,
-                                     .duration = getDurationInMvhdTimescale()})});
+               .box = new box::Tkhd({
+                   .flags = 0x000003,
+                   .creation_time = m_time_from_epoch,
+                   .modification_time = m_time_from_epoch,
+                   .track_id = m_track_id,
+                   .duration = getDurationInMvhdTimescale(),
+                   .alternate_group = 1,
+               })});
 }
 
 void SounTrack::makeSmhdBoxInfo(BoxInfo* minf) {

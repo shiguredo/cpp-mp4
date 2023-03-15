@@ -26,7 +26,7 @@ BoxInfo* Writer::getMoovBoxInfo() const {
 }
 
 std::uint64_t Writer::getTimeFromEpoch() const {
-  return m_time_from_epoch;
+  return 0;
 }
 
 std::uint32_t Writer::getMvhdTimescale() const {
