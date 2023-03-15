@@ -25,6 +25,7 @@ class Descriptor {
   virtual std::uint64_t writeData(bitio::Writer*) const = 0;
   virtual std::uint64_t getSize() const = 0;
   virtual std::uint32_t getDataSize() const = 0;
+  virtual std::uint32_t getDataSizeWithSubDescriptors() const = 0;
   virtual std::uint64_t readData(bitio::Reader*) = 0;
   virtual std::string toString() const = 0;
 
@@ -57,7 +58,7 @@ class ESDescriptor : public Descriptor {
   std::uint64_t writeData(bitio::Writer*) const override;
   std::uint64_t getSize() const override;
   std::uint32_t getDataSize() const override;
-  std::uint32_t getDataSizeWithSubDescriptors() const;
+  std::uint32_t getDataSizeWithSubDescriptors() const override;
   std::uint64_t readData(bitio::Reader*) override;
   std::string toString() const override;
   void addSubDescriptor(std::shared_ptr<Descriptor>);
@@ -93,10 +94,13 @@ class DecoderConfigDescriptor : public Descriptor {
   std::uint64_t writeData(bitio::Writer*) const override;
   std::uint64_t getSize() const override;
   std::uint32_t getDataSize() const override;
+  std::uint32_t getDataSizeWithSubDescriptors() const override;
   std::uint64_t readData(bitio::Reader*) override;
   std::string toString() const override;
+  void addSubDescriptor(std::shared_ptr<Descriptor>);
 
  private:
+  std::uint32_t m_sub_descriptors_size = 0;
   std::uint8_t m_object_type_indication;
   std::int8_t m_stream_type;
   bool m_upstream;
@@ -104,6 +108,7 @@ class DecoderConfigDescriptor : public Descriptor {
   std::uint32_t m_buffer_size_db;
   std::uint32_t m_max_bitrate;
   std::uint32_t m_avg_bitrate;
+  std::vector<std::shared_ptr<Descriptor>> m_sub_descriptors = {};
 };
 
 struct DecSpecificInfoParameters {
@@ -118,6 +123,7 @@ class DecSpecificInfo : public Descriptor {
   std::uint64_t writeData(bitio::Writer*) const override;
   std::uint64_t getSize() const override;
   std::uint32_t getDataSize() const override;
+  std::uint32_t getDataSizeWithSubDescriptors() const override;
   std::uint64_t readData(bitio::Reader*) override;
   std::string toString() const override;
 
@@ -137,6 +143,7 @@ class SLConfigDescr : public Descriptor {
   std::uint64_t writeData(bitio::Writer*) const override;
   std::uint64_t getSize() const override;
   std::uint32_t getDataSize() const override;
+  std::uint32_t getDataSizeWithSubDescriptors() const override;
   std::uint64_t readData(bitio::Reader*) override;
   std::string toString() const override;
 

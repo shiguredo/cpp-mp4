@@ -66,7 +66,7 @@ std::uint64_t ESDescriptor::writeData(bitio::Writer* writer) const {
 }
 
 std::uint64_t ESDescriptor::getSize() const {
-  return 1 + bitio::uvarint_size<std::uint32_t>(getDataSizeWithSubDescriptors()) + getDataSize();
+  return 1 + bitio::uvarint_size<std::uint32_t>(getDataSize()) + getDataSize();
 }
 
 std::uint32_t ESDescriptor::getDataSizeWithSubDescriptors() const {
@@ -74,7 +74,10 @@ std::uint32_t ESDescriptor::getDataSizeWithSubDescriptors() const {
     return getDataSize() + m_sub_descriptors_size;
   }
   return getDataSize() + std::accumulate(std::begin(m_sub_descriptors), std::end(m_sub_descriptors), 0U,
-                                         [](const std::uint32_t a, auto d) { return a + d->getSize(); });
+                                         [](const std::uint32_t a, auto d) {
+                                           return a + 5U  // tag + sizeof(varint)
+                                                  + d->getDataSizeWithSubDescriptors();
+                                         });
 }
 
 std::uint32_t ESDescriptor::getDataSize() const {
@@ -153,7 +156,7 @@ DecoderConfigDescriptor::DecoderConfigDescriptor(const DecoderConfigDescriptorPa
 
 std::uint64_t DecoderConfigDescriptor::writeData(bitio::Writer* writer) const {
   auto wbits = bitio::write_int<std::int8_t>(writer, m_tag);
-  wbits += bitio::write_uvarint<std::uint32_t>(writer, getDataSize());
+  wbits += bitio::write_uvarint<std::uint32_t>(writer, getDataSizeWithSubDescriptors());
   wbits += bitio::write_uint<std::uint8_t>(writer, m_object_type_indication);
   wbits += bitio::write_int<std::int8_t>(writer, m_stream_type, 6);
   wbits += write_bool(writer, m_upstream);
@@ -168,13 +171,22 @@ std::uint64_t DecoderConfigDescriptor::getSize() const {
   return 1 + getDataSize() + bitio::uvarint_size<std::uint32_t>(getDataSize());
 }
 
+std::uint32_t DecoderConfigDescriptor::getDataSizeWithSubDescriptors() const {
+  if (m_sub_descriptors_size > 0) {
+    return getDataSize() + m_sub_descriptors_size;
+  }
+
+  return getDataSize() + std::accumulate(std::begin(m_sub_descriptors), std::end(m_sub_descriptors), 0U,
+                                         [](const std::uint32_t a, auto d) { return a + d->getSize(); });
+}
+
 std::uint32_t DecoderConfigDescriptor::getDataSize() const {
   return 13;
 }
 
 std::uint64_t DecoderConfigDescriptor::readData(bitio::Reader* reader) {
-  std::uint32_t size;
-  auto rbits = bitio::read_uvarint<std::uint32_t>(reader, &size);
+  std::uint32_t data_size_with_sub_descriptors;
+  auto rbits = bitio::read_uvarint<std::uint32_t>(reader, &data_size_with_sub_descriptors);
   rbits += bitio::read_uint<std::uint8_t>(reader, &m_object_type_indication);
   rbits += bitio::read_int<std::int8_t>(reader, &m_stream_type, 6);
   rbits += read_bool(reader, &m_upstream);
@@ -182,6 +194,7 @@ std::uint64_t DecoderConfigDescriptor::readData(bitio::Reader* reader) {
   rbits += bitio::read_uint<std::uint32_t>(reader, &m_buffer_size_db, 24);
   rbits += bitio::read_uint<std::uint32_t>(reader, &m_max_bitrate);
   rbits += bitio::read_uint<std::uint32_t>(reader, &m_avg_bitrate);
+  m_sub_descriptors_size = data_size_with_sub_descriptors - getDataSize();
   return rbits;
 }
 std::string DecoderConfigDescriptor::toString() const {
@@ -215,6 +228,10 @@ std::uint32_t DecSpecificInfo::getDataSize() const {
   return static_cast<std::uint32_t>(std::size(m_data));
 }
 
+std::uint32_t DecSpecificInfo::getDataSizeWithSubDescriptors() const {
+  return static_cast<std::uint32_t>(std::size(m_data));
+}
+
 std::uint64_t DecSpecificInfo::readData(bitio::Reader* reader) {
   std::uint32_t size;
   auto rbits = bitio::read_uvarint<std::uint32_t>(reader, &size);
@@ -244,6 +261,10 @@ std::uint64_t SLConfigDescr::getSize() const {
 }
 
 std::uint32_t SLConfigDescr::getDataSize() const {
+  return static_cast<std::uint32_t>(std::size(m_data));
+}
+
+std::uint32_t SLConfigDescr::getDataSizeWithSubDescriptors() const {
   return static_cast<std::uint32_t>(std::size(m_data));
 }
 
@@ -326,6 +347,10 @@ std::uint64_t Esds::readData(std::istream& is) {
 }
 
 void ESDescriptor::addSubDescriptor(std::shared_ptr<Descriptor> desc) {
+  m_sub_descriptors.push_back(desc);
+}
+
+void DecoderConfigDescriptor::addSubDescriptor(std::shared_ptr<Descriptor> desc) {
   m_sub_descriptors.push_back(desc);
 }
 
