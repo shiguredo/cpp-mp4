@@ -120,9 +120,9 @@ std::uint64_t ESDescriptor::readData(bitio::Reader* reader) {
 
 std::string ESDescriptor::toString() const {
   std::string s = fmt::format(
-      "{{Tag=ESDescr Size={} ESID={} StreamDependenceFlag={} UrlFlag={} "
+      "{{Tag=ESDescr DataSize={} DataSizeWithSubDescriptors={} ESID={} StreamDependenceFlag={} UrlFlag={} "
       "OcrStreamFlag={} StreamPriority={}",
-      getDataSizeWithSubDescriptors(), m_ESID, m_stream_dependence_flag, m_url_flag, m_ocr_stream_flag,
+      getDataSize(), getDataSizeWithSubDescriptors(), m_ESID, m_stream_dependence_flag, m_url_flag, m_ocr_stream_flag,
       m_stream_priority);
 
   if (m_stream_dependence_flag) {
@@ -144,7 +144,8 @@ DecoderConfigDescriptor::DecoderConfigDescriptor() {
 }
 
 DecoderConfigDescriptor::DecoderConfigDescriptor(const DecoderConfigDescriptorParameters& params)
-    : m_object_type_indication(params.object_type_indication),
+    : m_sub_descriptors_size(params.sub_descriptors_size),
+      m_object_type_indication(params.object_type_indication),
       m_stream_type(params.stream_type),
       m_upstream(params.upstream),
       m_reserved(params.reserved),
@@ -199,11 +200,11 @@ std::uint64_t DecoderConfigDescriptor::readData(bitio::Reader* reader) {
 }
 std::string DecoderConfigDescriptor::toString() const {
   return fmt::format(
-      "{{Tag=DecoderConfigDescr Size={} ObjectTypeIndication={:#x} "
+      "{{Tag=DecoderConfigDescr DataSize={} DataSizeWithSubDescriptors={} ObjectTypeIndication={:#x} "
       "StreamType={} UpStream={} Reserved={} BufferSizeDB={} MaxBitrate={} "
       "AvgBitrate={}}}",
-      getDataSize(), m_object_type_indication, m_stream_type, m_upstream, m_reserved, m_buffer_size_db, m_max_bitrate,
-      m_avg_bitrate);
+      getDataSize(), getDataSizeWithSubDescriptors(), m_object_type_indication, m_stream_type, m_upstream, m_reserved,
+      m_buffer_size_db, m_max_bitrate, m_avg_bitrate);
 }
 
 DecSpecificInfo::DecSpecificInfo() {
@@ -239,7 +240,7 @@ std::uint64_t DecSpecificInfo::readData(bitio::Reader* reader) {
 }
 
 std::string DecSpecificInfo::toString() const {
-  return fmt::format("{{Tag=DecSpecificInfo Size={} Data=[{:#x}]}}", std::size(m_data), fmt::join(m_data, ", "));
+  return fmt::format("{{Tag=DecSpecificInfo DataSize={} Data=[{:#x}]}}", getDataSize(), fmt::join(m_data, ", "));
 }
 
 SLConfigDescr::SLConfigDescr() {
@@ -275,7 +276,7 @@ std::uint64_t SLConfigDescr::readData(bitio::Reader* reader) {
 }
 
 std::string SLConfigDescr::toString() const {
-  return fmt::format("{{Tag=SLConfigDescr Size={} Data=[{:#x}]}}", std::size(m_data), fmt::join(m_data, ", "));
+  return fmt::format("{{Tag=SLConfigDescr DataSize={} Data=[{:#x}]}}", getDataSize(), fmt::join(m_data, ", "));
 }
 
 BoxType box_type_esds() {

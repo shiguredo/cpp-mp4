@@ -77,6 +77,7 @@ class ESDescriptor : public Descriptor {
 };
 
 struct DecoderConfigDescriptorParameters {
+  const std::uint32_t sub_descriptors_size = 0;
   const std::uint8_t object_type_indication;
   const std::int8_t stream_type;
   const bool upstream = false;

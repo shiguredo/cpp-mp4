@@ -316,7 +316,8 @@ BoxTypesTestCase box_test_cases[] = {
                               .OCRESID = 0})),
                      std::
                          shared_ptr<shiguredo::mp4::box::Descriptor>(
-                             new shiguredo::mp4::box::DecoderConfigDescriptor({.object_type_indication = 0x12,
+                             new shiguredo::mp4::box::DecoderConfigDescriptor({.sub_descriptors_size = 8,
+                                                                               .object_type_indication = 0x12,
                                                                                .stream_type = 0x15,
                                                                                .upstream = true,
                                                                                .reserved = false,
@@ -342,7 +343,7 @@ BoxTypesTestCase box_test_cases[] = {
             'e',                     // urlString
                                      //
             0x04,                    // tag
-            0x80, 0x80, 0x80, 0x0d,  // size (varint)
+            0x80, 0x80, 0x80, 0x15,  // size (varint)
             0x12,                    // objectTypeIndication
             0x56,                    // streamType & upStream & reserved
             0x12, 0x34, 0x56,        // bufferSizeDB
@@ -358,20 +359,23 @@ BoxTypesTestCase box_test_cases[] = {
             0x11, 0x22, 0x33, 0x44, 0x55,  // data
         },
         "Version=0 Flags=0x000000 Descriptors=[{Tag=ESDescr "
-        "Size=42 "
+        "DataSize=15 "
+        "DataSizeWithSubDescriptors=42 "
         "ESID=4660 "
         "StreamDependenceFlag=false UrlFlag=true "
         "OcrStreamFlag=false "
         "StreamPriority=3 URLLength=0xb "
         "URLString=\"http://hoge\"}, "
-        "{Tag=DecoderConfigDescr Size=13 "
+        "{Tag=DecoderConfigDescr "
+        "DataSize=13 "
+        "DataSizeWithSubDescriptors=21 "
         "ObjectTypeIndication=0x12 "
         "StreamType=21 UpStream=true Reserved=false "
         "BufferSizeDB=1193046 "
         "MaxBitrate=305419896 AvgBitrate=591751049}, "
         "{Tag=DecSpecificInfo "
-        "Size=3 Data=[0x11, 0x22, 0x33]}, {Tag=SLConfigDescr "
-        "Size=5 "
+        "DataSize=3 Data=[0x11, 0x22, 0x33]}, {Tag=SLConfigDescr "
+        "DataSize=5 "
         "Data=[0x11, 0x22, 0x33, 0x44, 0x55]}]",
     },
     {
