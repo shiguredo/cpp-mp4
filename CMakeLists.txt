@@ -11,7 +11,7 @@ set(CMAKE_CXX_COMPILER clang++)
 include(cmake/env.cmake)
 include(cmake/tools.cmake)
 
-set_cache_string_from_env(BOOST_VERSION 1.78.0 "Boost のバージョン")
+set_cache_string_from_env(BOOST_VERSION 1.81.0 "Boost のバージョン")
 set_cache_string_from_env(CLI11_VERSION 2.1.2 "CLI11 のバージョン")
 set_cache_string_from_env(FMT_VERSION 8.0.1 "fmt のバージョン")
 set_cache_string_from_env(RAPIDCSV_VERSION 8.53 "rapidcsv のバージョン")
@@ -76,6 +76,13 @@ CPMAddPackage(
     )
 
 CPMAddPackage(
+    NAME boost_describe
+    GITHUB_REPOSITORY boostorg/describe
+    GIT_TAG boost-${BOOST_VERSION}
+    DOWNLOAD_ONLY YES
+    )
+
+CPMAddPackage(
     NAME boost_detail
     GITHUB_REPOSITORY boostorg/detail
     GIT_TAG boost-${BOOST_VERSION}
@@ -103,6 +110,12 @@ CPMAddPackage(
     DOWNLOAD_ONLY YES
     )
 
+CPMAddPackage(
+    NAME boost_mp11
+    GITHUB_REPOSITORY boostorg/mp11
+    GIT_TAG boost-${BOOST_VERSION}
+    DOWNLOAD_ONLY YES
+    )
 
 CPMAddPackage(
     NAME boost_preprocessor
@@ -260,10 +273,12 @@ target_include_directories(shiguredo-mp4
     ${boost_config_SOURCE_DIR}/include
     ${boost_container_hash_SOURCE_DIR}/include
     ${boost_core_SOURCE_DIR}/include
+    ${boost_describe_SOURCE_DIR}/include
     ${boost_detail_SOURCE_DIR}/include
     ${boost_function_SOURCE_DIR}/include
     ${boost_functional_SOURCE_DIR}/include
     ${boost_integer_SOURCE_DIR}/include
+    ${boost_mp11_SOURCE_DIR}/include
     ${boost_preprocessor_SOURCE_DIR}/include
     ${boost_static_assert_SOURCE_DIR}/include
     ${boost_throw_exception_SOURCE_DIR}/include
@@ -304,10 +319,12 @@ if(WITH_CLI)
         ${boost_config_SOURCE_DIR}/include
         ${boost_container_hash_SOURCE_DIR}/include
         ${boost_core_SOURCE_DIR}/include
+        ${boost_describe_SOURCE_DIR}/include
         ${boost_detail_SOURCE_DIR}/include
         ${boost_function_SOURCE_DIR}/include
         ${boost_functional_SOURCE_DIR}/include
         ${boost_integer_SOURCE_DIR}/include
+        ${boost_mp11_SOURCE_DIR}/include
         ${boost_preprocessor_SOURCE_DIR}/include
         ${boost_static_assert_SOURCE_DIR}/include
         ${boost_throw_exception_SOURCE_DIR}/include

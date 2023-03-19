@@ -38,6 +38,7 @@ target_include_directories(bitio_test
     ${boost_config_SOURCE_DIR}/include
     ${boost_container_hash_SOURCE_DIR}/include
     ${boost_core_SOURCE_DIR}/include
+    ${boost_describe_SOURCE_DIR}/include
     ${boost_detail_SOURCE_DIR}/include
     ${boost_exception_SOURCE_DIR}/include
     ${boost_function_SOURCE_DIR}/include
@@ -45,6 +46,7 @@ target_include_directories(bitio_test
     ${boost_io_SOURCE_DIR}/include
     ${boost_iterator_SOURCE_DIR}/include
     ${boost_move_SOURCE_DIR}/include
+    ${boost_mp11_SOURCE_DIR}/include
     ${boost_mpl_SOURCE_DIR}/include
     ${boost_numeric_conversion_SOURCE_DIR}/include
     ${boost_preprocessor_SOURCE_DIR}/include
