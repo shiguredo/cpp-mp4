@@ -136,6 +136,8 @@ int main(int argc, char** argv) {
                                               .track_id = writer.getAndUpdateNextTrackID(),
                                               .width = 640,
                                               .height = 240,
+                                              .max_bitrate = 250000,
+                                              .avg_bitrate = 250000,
                                               .writer = &writer});
     for (std::size_t s = 0; s < 16; ++s) {
       // chunk length: 1000ms
@@ -208,6 +210,8 @@ int main(int argc, char** argv) {
                                               .track_id = writer.getAndUpdateNextTrackID(),
                                               .width = 640,
                                               .height = 240,
+                                              .max_bitrate = 250000,
+                                              .avg_bitrate = 250000,
                                               .writer = &writer});
     for (std::size_t s = 0; s < 16; ++s) {
       // chunk length: 960ms
@@ -246,6 +250,8 @@ int main(int argc, char** argv) {
                                               .track_id = writer.getAndUpdateNextTrackID(),
                                               .width = 640,
                                               .height = 240,
+                                              .max_bitrate = 250000,
+                                              .avg_bitrate = 250000,
                                               .writer = &writer});
     for (std::size_t s = 0; s < 16; ++s) {
       // chunk length: 960ms
@@ -279,6 +285,8 @@ int main(int argc, char** argv) {
                                               .track_id = writer.getAndUpdateNextTrackID(),
                                               .width = 640,
                                               .height = 240,
+                                              .max_bitrate = 250000,
+                                              .avg_bitrate = 250000,
                                               .writer = &writer});
     for (std::size_t s = 0; s < 16; ++s) {
       // chunk length: 1000ms
@@ -319,6 +327,8 @@ int main(int argc, char** argv) {
                                               .track_id = writer.getAndUpdateNextTrackID(),
                                               .width = 640,
                                               .height = 240,
+                                              .max_bitrate = 250000,
+                                              .avg_bitrate = 250000,
                                               .writer = &writer});
     for (std::size_t s = 0; s < 16; ++s) {
       // chunk length: 960 ms
