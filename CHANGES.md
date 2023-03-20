@@ -12,6 +12,23 @@
 
 ## develop
 
+## 2023.1.0
+
+- [UPDATE] 依存ライブラリの更新
+    - `boost` を `1.81.0` に
+    - `CLI11` を `2.3.2` に
+    - `fmt` を `9.1.0` に
+    - `spdlog` を `1.11.0` に
+    - `rapidcsv` を `8.69` に
+    - @haruyama
+    - https://github.com/shiguredo/cpp-mp4/pull/20
+- [FIX] Safari, Windows Media Player などでの再生の問題を修正
+    - @haruyama
+    - https://github.com/shiguredo/cpp-mp4/pull/19
+- [FIX] typo の修正
+    - @haruyama
+    - https://github.com/shiguredo/cpp-mp4/pull/18
+
 ## 2022.1.0
 
 - [UPDATE] 依存ライブラリの更新
