@@ -12,6 +12,12 @@
 
 ## develop
 
+## 2023.1.1
+
+- [FIX] Version 上げ忘れを修正 #25 
+    - @haruyama
+    - https://github.com/shiguredo/cpp-mp4/pull/25
+
 ## 2023.1.0
 
 - [UPDATE] 依存ライブラリの更新
