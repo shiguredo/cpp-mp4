@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <vector>
 
 #include "shiguredo/mp4/track/vide.hpp"
 
@@ -32,6 +33,8 @@ class AV1Track : public VideTrack {
  public:
   explicit AV1Track(const AV1TrackParameters&);
   void appendTrakBoxInfo(BoxInfo*) override;
+  void addData(const std::uint64_t, const std::vector<std::uint8_t>&, bool) override;
+  void addData(const std::uint64_t, const std::uint8_t*, const std::size_t, bool) override;
 
  private:
   void makeStsdBoxInfo(BoxInfo*);

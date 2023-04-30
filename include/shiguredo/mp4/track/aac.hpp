@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <vector>
 
 #include "shiguredo/mp4/track/soun.hpp"
 
@@ -33,6 +34,8 @@ class AACTrack : public SounTrack {
  public:
   explicit AACTrack(const AACTrackParameters&);
   void appendTrakBoxInfo(BoxInfo*) override;
+  void addData(const std::uint64_t, const std::vector<std::uint8_t>&, bool) override;
+  void addData(const std::uint64_t, const std::uint8_t*, const std::size_t, bool) override;
 
  private:
   const std::uint32_t m_buffer_size_db;

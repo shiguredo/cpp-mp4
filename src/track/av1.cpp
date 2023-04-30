@@ -71,4 +71,15 @@ void AV1Track::appendTrakBoxInfo(BoxInfo* moov) {
   makeOffsetBoxInfo(stbl);
 }
 
+void AV1Track::addData(const std::uint64_t timestamp, const std::vector<std::uint8_t>& data, bool is_key) {
+  addMdatData(timestamp, data, is_key);
+}
+
+void AV1Track::addData(const std::uint64_t timestamp,
+                       const std::uint8_t* data,
+                       const std::size_t data_size,
+                       bool is_key) {
+  addMdatData(timestamp, data, data_size, is_key);
+}
+
 }  // namespace shiguredo::mp4::track

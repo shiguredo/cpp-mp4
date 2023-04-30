@@ -42,15 +42,17 @@ enum HandlerType {
 class Track {
  public:
   virtual ~Track() = default;
-  void addMdatData(const std::uint64_t timestamp, const std::vector<std::uint8_t>&, bool is_key);
-  void addMdatData(const std::uint64_t timestamp, const std::uint8_t*, const std::size_t, bool is_key);
   virtual void appendTrakBoxInfo(BoxInfo*) = 0;
+  virtual void addData(const std::uint64_t, const std::vector<std::uint8_t>&, bool) = 0;
+  virtual void addData(const std::uint64_t, const std::uint8_t*, const std::size_t, bool) = 0;
   void setMediaTime(const std::int64_t);
   std::uint64_t getTimescale() const;
   void resetChunkOffsets(std::uint64_t);
   void terminateCurrentChunk();
 
  protected:
+  void addMdatData(const std::uint64_t, const std::vector<std::uint8_t>&, bool);
+  void addMdatData(const std::uint64_t, const std::uint8_t*, const std::size_t, bool);
   std::uint32_t m_timescale;
   float m_duration;
   std::uint32_t m_mvhd_timescale;
