@@ -20,6 +20,7 @@ add_compile_options(
 add_executable(track_test
     main.cpp
     track.cpp
+    h264.cpp
     ../../src/bitio/bitio.cpp
     ../../src/bitio/reader.cpp
     ../../src/bitio/writer.cpp
@@ -96,6 +97,9 @@ add_executable(track_test
     ../../src/stream/stream.cpp
     ../../src/time/time.cpp
     ../../src/track/track.cpp
+    ../../src/track/h264.cpp
+    ../../src/track/vide.cpp
+    ../../src/writer/writer.cpp
     )
 
 set_target_properties(track_test PROPERTIES CXX_STANDARD 20 C_STANDARD 11)
