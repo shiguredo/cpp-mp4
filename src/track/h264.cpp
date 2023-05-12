@@ -92,30 +92,42 @@ void H264Track::addData(const std::uint64_t timestamp,
     auto nu = find_next_nal_unit(data, data_size, start);
     std::vector<uint8_t> sps_data = {};
     std::vector<uint8_t> pps_data = {};
-    switch (nu.type) {
-      case 0x67:
-        // SPS
-        std::copy_n(data + nu.start + nu.header_size, nu.end - nu.start - nu.header_size, std::back_inserter(sps_data));
-        appendSequenceParameterSets(shiguredo::mp4::box::AVCParameterSet({.nal_unit = sps_data}));
-        break;
-      case 0x68:
-        // SPS
-        std::copy_n(data + nu.start + nu.header_size, nu.end - nu.start - nu.header_size, std::back_inserter(pps_data));
-        appendPictureParameterSets(shiguredo::mp4::box::AVCParameterSet({.nal_unit = pps_data}));
-        break;
-      default:
-        std::size_t video_data_size = nu.end - nu.start - nu.header_size;
-        std::uint8_t* mdat_data = new std::uint8_t[video_data_size + 4];
-
+    std::size_t video_data_size;
+    std::uint8_t* mdat_data;
+    switch (nu.header & 0x1f) {
+      case 1:
+      case 2:
+      case 3:
+      case 4:
+      case 5:
+        // VCL
+        video_data_size = nu.end - nu.start - nu.start_code_size;
+        mdat_data = new std::uint8_t[video_data_size + 4];
         mdat_data[0] = static_cast<std::uint8_t>(video_data_size >> 24);
         mdat_data[1] = static_cast<std::uint8_t>(video_data_size >> 16);
         mdat_data[2] = static_cast<std::uint8_t>(video_data_size >> 8);
         mdat_data[3] = static_cast<std::uint8_t>(video_data_size & 0xff);
 
-        std::copy_n(data + nu.start + nu.header_size, video_data_size, mdat_data + 4);
+        std::copy_n(data + nu.start + nu.start_code_size, video_data_size, mdat_data + 4);
 
         addMdatData(timestamp, mdat_data, video_data_size + 4, is_key);
         delete[] mdat_data;
+        break;
+      case 7:
+        // SPS
+        std::copy_n(data + nu.start + nu.start_code_size, nu.end - nu.start - nu.start_code_size,
+                    std::back_inserter(sps_data));
+        appendSequenceParameterSets(shiguredo::mp4::box::AVCParameterSet({.nal_unit = sps_data}));
+        break;
+      case 8:
+        // PPS
+        std::copy_n(data + nu.start + nu.start_code_size, nu.end - nu.start - nu.start_code_size,
+                    std::back_inserter(pps_data));
+        appendPictureParameterSets(shiguredo::mp4::box::AVCParameterSet({.nal_unit = pps_data}));
+        break;
+      default:
+        throw std::runtime_error(
+            fmt::format("unsuppoted NalUnit type: header={:02x}, type={:02x}", nu.header, nu.header & 0x1f));
     }
 
     if (nu.end >= data_size) {
@@ -126,51 +138,51 @@ void H264Track::addData(const std::uint64_t timestamp,
 }
 
 bool operator==(NalUnit const& left, NalUnit const& right) {
-  return left.header_size == right.header_size && left.start == right.start && left.end == right.end &&
-         left.type == right.type;
+  return left.start_code_size == right.start_code_size && left.start == right.start && left.end == right.end &&
+         left.header == right.header;
 }
 
 std::ostream& operator<<(std::ostream& os, const NalUnit& nu) {
-  os << "header_size: " << nu.header_size << " start: " << nu.start << " end: " << nu.end
-     << " type: " << static_cast<uint32_t>(nu.type);
+  os << "start_code_size: " << nu.start_code_size << " start: " << nu.start << " end: " << nu.end
+     << " header: " << static_cast<uint32_t>(nu.header);
   return os;
 }
 
 NalUnit find_next_nal_unit(const std::uint8_t* data, const std::size_t data_size, const std::size_t start) {
   // start から NalUnit が始まっていることを期待する
   auto index = start;
-  std::size_t header_size;
-  std::uint8_t type = 0;
+  std::size_t start_code_size;
+  std::uint8_t header = 0;
   while (index + 5 < data_size) {
     if (data[index] == 0 && data[index + 1] == 0 && data[index + 2] == 0 & data[index + 3] == 1) {
-      if (type == 0) {
-        header_size = 4;
-        type = data[index + 4];
+      if (header == 0) {
+        start_code_size = 4;
+        header = data[index + 4];
       } else {
-        return NalUnit{header_size, start, index, type};
+        return NalUnit{start_code_size, start, index, header};
       }
       index += 4;
       continue;
     }
     if (data[index] == 0 && data[index + 1] == 0 && data[index + 2] == 1) {
-      if (type == 0) {
-        header_size = 3;
-        type = data[index + 3];
+      if (header == 0) {
+        start_code_size = 3;
+        header = data[index + 3];
       } else {
-        return NalUnit{header_size, start, index, type};
+        return NalUnit{start_code_size, start, index, header};
       }
       index += 3;
       continue;
     }
-    if (index == start && type == 0) {
+    if (index == start && header == 0) {
       throw std::runtime_error(fmt::format("not start with nalunit: start={}", start));
     }
     ++index;
   }
-  if (type == 0) {
+  if (header == 0) {
     throw std::runtime_error("nalunit not found");
   }
-  return NalUnit{header_size, start, data_size, type};
+  return NalUnit{start_code_size, start, data_size, header};
 }
 
 void H264Track::appendSequenceParameterSets(const shiguredo::mp4::box::AVCParameterSet& params) {

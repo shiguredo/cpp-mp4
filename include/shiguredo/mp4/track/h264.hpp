@@ -55,10 +55,10 @@ class H264Track : public VideTrack {
 };
 
 struct NalUnit {
-  std::size_t header_size;
+  std::size_t start_code_size;
   std::size_t start;
   std::size_t end;
-  std::uint8_t type;
+  std::uint8_t header;
 };
 
 bool operator==(NalUnit const& left, NalUnit const& right);
