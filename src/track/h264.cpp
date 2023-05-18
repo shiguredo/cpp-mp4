@@ -27,7 +27,7 @@ H264Track::H264Track(const H264TrackParameters& params) {
   m_height = params.height;
   m_writer = params.writer;
   m_configuration_version = params.configuration_version;
-  m_profile = params.configuration_version;
+  m_profile = params.profile;
   m_profile_compatibility = params.profile_compatibility;
   m_level = params.level;
 }
