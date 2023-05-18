@@ -16,6 +16,7 @@
 #include <CLI/Config.hpp>
 #include <CLI/Formatter.hpp>
 
+#include "shiguredo/mp4/brand.hpp"
 #include "shiguredo/mp4/track/aac.hpp"
 #include "shiguredo/mp4/track/av1.hpp"
 #include "shiguredo/mp4/track/h264.hpp"
@@ -368,7 +369,14 @@ int main(int argc, char** argv) {
     load_resources_from_csv(&h264_resources, h264_filename);
     std::ofstream ofs(filename, std::ios_base::binary);
     const float duration = 15.36f;
-    shiguredo::mp4::writer::SimpleWriter writer(ofs, {.mvhd_timescale = 1000, .duration = duration});
+    shiguredo::mp4::writer::SimpleWriter writer(
+        ofs, {.mvhd_timescale = 1000,
+              .duration = duration,
+              .ftyp_params = shiguredo::mp4::box::FtypParameters{.major_brand = shiguredo::mp4::BrandIsom,
+                                                                 .minor_version = 0,
+                                                                 .compatible_brands = {
+                                                                     shiguredo::mp4::BrandMp41,
+                                                                 }}});
     writer.writeFtypBox();
     shiguredo::mp4::track::AACTrack aac_trak({.timescale = 48000,
                                               .duration = duration,
@@ -406,7 +414,15 @@ int main(int argc, char** argv) {
     load_resources_from_csv(&h264_resources, h264_filename);
     std::ofstream ofs(filename, std::ios_base::binary);
     const float duration = 15.36f;
-    shiguredo::mp4::writer::FaststartWriter writer(ofs, {.mvhd_timescale = 1000, .duration = duration});
+    shiguredo::mp4::writer::FaststartWriter writer(
+        ofs, {.mvhd_timescale = 1000,
+              .duration = duration,
+              .ftyp_params = shiguredo::mp4::box::FtypParameters{.major_brand = shiguredo::mp4::BrandIsom,
+                                                                 .minor_version = 0,
+                                                                 .compatible_brands = {
+                                                                     shiguredo::mp4::BrandMp41,
+                                                                 }}});
+
     writer.writeFtypBox();
     shiguredo::mp4::track::AACTrack aac_trak({.timescale = 48000,
                                               .duration = duration,
