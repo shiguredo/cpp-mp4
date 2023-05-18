@@ -29,7 +29,7 @@ struct H264TrackParameters {
   const std::uint32_t height;
   const std::uint8_t configuration_version = 0x1;
   const std::uint8_t profile = box::AvcProfiles::AVCBaselineProfile;
-  const std::uint8_t profile_compatibility = 0;
+  const std::uint8_t profile_compatibility = 0xc0;
   const std::uint8_t level = 31;
   shiguredo::mp4::writer::Writer* writer;
 };

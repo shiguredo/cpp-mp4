@@ -118,6 +118,12 @@ void H264Track::addData(const std::uint64_t timestamp,
         std::copy_n(data + nu.start + nu.start_code_size, nu.end - nu.start - nu.start_code_size,
                     std::back_inserter(sps_data));
         appendSequenceParameterSets(shiguredo::mp4::box::AVCParameterSet({.nal_unit = sps_data}));
+        // 最初の SPS で profile, profile_compatibility, level を置換する
+        if (std::size(m_sequence_parameter_sets) == 1 && std::size(sps_data) > 4) {
+          m_profile = sps_data[1];
+          m_profile_compatibility = sps_data[2];
+          m_level = sps_data[3];
+        }
         break;
       case 8:
         // PPS
