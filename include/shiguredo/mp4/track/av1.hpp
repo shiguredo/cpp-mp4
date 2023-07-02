@@ -32,6 +32,8 @@ struct AV1TrackParameters {
   const std::uint8_t chroma_subsampling_x = 1;
   const std::uint8_t chroma_subsampling_y = 1;
   const std::uint8_t chroma_sample_position = 0;
+  const std::vector<std::uint8_t>& config_OBUs = {0xa,  0xb,  0x0,  0x0,  0x0,  0x4, 0x47,
+                                                  0x7e, 0x1a, 0xff, 0xfc, 0xc0, 0x20};
   shiguredo::mp4::writer::Writer* writer;
 };
 
@@ -41,6 +43,7 @@ class AV1Track : public VideTrack {
   void appendTrakBoxInfo(BoxInfo*) override;
   void addData(const std::uint64_t, const std::vector<std::uint8_t>&, bool) override;
   void addData(const std::uint64_t, const std::uint8_t*, const std::size_t, bool) override;
+  void setConfigOBUs(const std::vector<std::uint8_t>&);
 
  private:
   std::uint8_t m_seq_profile;
@@ -49,7 +52,7 @@ class AV1Track : public VideTrack {
   std::uint8_t m_chroma_subsampling_x;
   std::uint8_t m_chroma_subsampling_y;
   std::uint8_t m_chroma_sample_position;
-  std::vector<std::uint8_t> m_config_OBUs = {0xa, 0xb, 0x0, 0x0, 0x0, 0x4, 0x47, 0x7e, 0x1a, 0xff, 0xfc, 0xc0, 0x20};
+  std::vector<std::uint8_t> m_config_OBUs;
   void makeStsdBoxInfo(BoxInfo*);
 };
 

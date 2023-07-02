@@ -27,6 +27,7 @@ AV1Track::AV1Track(const AV1TrackParameters& params) {
   m_chroma_subsampling_x = params.chroma_subsampling_x;
   m_chroma_subsampling_y = params.chroma_subsampling_y;
   m_chroma_sample_position = params.chroma_sample_position;
+  setConfigOBUs(params.config_OBUs);
   m_writer = params.writer;
 }
 
@@ -85,6 +86,12 @@ void AV1Track::addData(const std::uint64_t timestamp,
                        const std::size_t data_size,
                        bool is_key) {
   addMdatData(timestamp, data, data_size, is_key);
+}
+
+void AV1Track::setConfigOBUs(const std::vector<std::uint8_t>& config_OBUs) {
+  // configOBUs を解釈し他のパラメーターを設定するほうが好ましいが, 煩雑になるので他のパラメーターは決め打ちとしている
+  // https://github.com/dwbuiten/obuparse を利用してパースできる
+  m_config_OBUs = config_OBUs;
 }
 
 }  // namespace shiguredo::mp4::track
