@@ -15,7 +15,7 @@ namespace shiguredo::mp4::track {
 class VideTrack : public Track {
  protected:
   VideTrack();
-  void makeTkhdBoxInfo(BoxInfo*);
+  void makeTkhdBoxInfo(BoxInfo*) override;
   void makeVmhdBoxInfo(BoxInfo*);
   std::uint32_t m_width;
   std::uint32_t m_height;
