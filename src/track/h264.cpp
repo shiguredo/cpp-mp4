@@ -113,6 +113,10 @@ void H264Track::addData(const std::uint64_t timestamp,
         addMdatData(timestamp, mdat_data, video_data_size + 4, is_key);
         delete[] mdat_data;
         break;
+      case 6:
+        // SEI
+        // 無視する
+        break;
       case 7:
         // SPS
         std::copy_n(data + nu.start + nu.start_code_size, nu.end - nu.start - nu.start_code_size,
