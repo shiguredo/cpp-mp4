@@ -21,6 +21,13 @@ AV1Track::AV1Track(const AV1TrackParameters& params) {
   }
   m_width = params.width;
   m_height = params.height;
+  m_seq_profile = params.seq_profile;
+  m_seq_level_idx_0 = params.seq_level_idx_0;
+  m_seq_tier_0 = params.seq_tier_0;
+  m_chroma_subsampling_x = params.chroma_subsampling_x;
+  m_chroma_subsampling_y = params.chroma_subsampling_y;
+  m_chroma_sample_position = params.chroma_sample_position;
+  setConfigOBUs(params.config_OBUs);
   m_writer = params.writer;
 }
 
@@ -35,14 +42,13 @@ void AV1Track::makeStsdBoxInfo(BoxInfo* stbl) {
                                .height = static_cast<std::uint16_t>(m_height),
                            })});
   new BoxInfo({.parent = av01,
-               .box = new box::AV1CodecConfiguration(
-                   {.seq_profile = 0,
-                    .seq_level_idx_0 = 0,
-                    .seq_tier_0 = 0,
-                    .chroma_subsampling_x = 0,
-                    .chroma_subsampling_y = 0,
-                    .chroma_sample_position = 0,
-                    .config_OBUs = {0xa, 0xb, 0x0, 0x0, 0x0, 0x4, 0x47, 0x7e, 0x1a, 0xff, 0xfc, 0xc0, 0x20}})});
+               .box = new box::AV1CodecConfiguration({.seq_profile = m_seq_profile,
+                                                      .seq_level_idx_0 = m_seq_level_idx_0,
+                                                      .seq_tier_0 = m_seq_tier_0,
+                                                      .chroma_subsampling_x = m_chroma_subsampling_x,
+                                                      .chroma_subsampling_y = m_chroma_subsampling_y,
+                                                      .chroma_sample_position = m_chroma_sample_position,
+                                                      .config_OBUs = m_config_OBUs})});
 }
 
 void AV1Track::appendTrakBoxInfo(BoxInfo* moov) {
@@ -69,6 +75,23 @@ void AV1Track::appendTrakBoxInfo(BoxInfo* moov) {
   makeStscBoxInfo(stbl);
   makeStszBoxInfo(stbl);
   makeOffsetBoxInfo(stbl);
+}
+
+void AV1Track::addData(const std::uint64_t timestamp, const std::vector<std::uint8_t>& data, bool is_key) {
+  addMdatData(timestamp, data, is_key);
+}
+
+void AV1Track::addData(const std::uint64_t timestamp,
+                       const std::uint8_t* data,
+                       const std::size_t data_size,
+                       bool is_key) {
+  addMdatData(timestamp, data, data_size, is_key);
+}
+
+void AV1Track::setConfigOBUs(const std::vector<std::uint8_t>& config_OBUs) {
+  // configOBUs を解釈し他のパラメーターを設定するほうが好ましいが, 煩雑になるので他のパラメーターは決め打ちとしている
+  // https://github.com/dwbuiten/obuparse を利用してパースできる
+  m_config_OBUs = config_OBUs;
 }
 
 }  // namespace shiguredo::mp4::track

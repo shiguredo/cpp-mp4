@@ -64,7 +64,7 @@ struct AVCDecoderConfigurationParameters {
   const std::uint8_t profile;
   const std::uint8_t profile_compatibility;
   const std::uint8_t level;
-  const std::uint8_t length_size_minus_one;
+  const std::uint8_t length_size_minus_one = 3;
   const std::vector<AVCParameterSet> sequence_parameter_sets = {};
   const std::vector<AVCParameterSet> picture_parameter_sets = {};
   const bool high_profile_fields_enabled = false;

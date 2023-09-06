@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <vector>
 
 #include "shiguredo/mp4/track/soun.hpp"
 
@@ -30,6 +31,8 @@ class OpusTrack : public SounTrack {
  public:
   explicit OpusTrack(const OpusTrackParameters&);
   void appendTrakBoxInfo(BoxInfo*) override;
+  void addData(const std::uint64_t, const std::vector<std::uint8_t>&, bool) override;
+  void addData(const std::uint64_t, const std::uint8_t*, const std::size_t, bool) override;
 
  private:
   const std::uint64_t m_pre_skip;
