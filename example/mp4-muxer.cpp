@@ -16,8 +16,10 @@
 #include <CLI/Config.hpp>
 #include <CLI/Formatter.hpp>
 
+#include "shiguredo/mp4/brand.hpp"
 #include "shiguredo/mp4/track/aac.hpp"
 #include "shiguredo/mp4/track/av1.hpp"
+#include "shiguredo/mp4/track/h264.hpp"
 #include "shiguredo/mp4/track/mp3.hpp"
 #include "shiguredo/mp4/track/opus.hpp"
 #include "shiguredo/mp4/track/vpx.hpp"
@@ -47,10 +49,13 @@ int main(int argc, char** argv) {
   app.require_subcommand(1);
 
   std::string filename;
-  std::string opus_filename;
+
   std::string vp9_filename;
   std::string vp8_filename;
   std::string av1_filename;
+  std::string h264_filename;
+
+  std::string opus_filename;
   std::string mp3_filename;
   std::string aac_filename;
 
@@ -90,6 +95,16 @@ int main(int argc, char** argv) {
   aacvp9_faststart->add_option("-f,--file", filename, "filename");
   aacvp9_faststart->add_option("--aac", aac_filename, "aac resource filename");
   aacvp9_faststart->add_option("--vp9", vp9_filename, "vp9 resource filename");
+
+  auto aach264 = app.add_subcommand("aach264");
+  aach264->add_option("-f,--file", filename, "filename");
+  aach264->add_option("--aac", aac_filename, "aac resource filename");
+  aach264->add_option("--h264", h264_filename, "h264 resource filename");
+
+  auto aach264_faststart = app.add_subcommand("aach264_faststart");
+  aach264_faststart->add_option("-f,--file", filename, "filename");
+  aach264_faststart->add_option("--aac", aac_filename, "aac resource filename");
+  aach264_faststart->add_option("--h264", h264_filename, "h264 resource filename");
 
   CLI11_PARSE(app, argc, argv);
 
@@ -344,6 +359,98 @@ int main(int argc, char** argv) {
       vpx_trak.terminateCurrentChunk();
     }
     writer.appendTrakAndUdtaBoxInfo({&aac_trak, &vpx_trak});
+    writer.writeMoovBox();
+    writer.writeMdatHeader();
+    writer.copyMdatData();
+  } else if (subcommands[0] == aach264) {
+    std::vector<Resource> aac_resources;
+    load_resources_from_csv(&aac_resources, aac_filename);
+    std::vector<Resource> h264_resources;
+    load_resources_from_csv(&h264_resources, h264_filename);
+    std::ofstream ofs(filename, std::ios_base::binary);
+    const float duration = 15.36f;
+    shiguredo::mp4::writer::SimpleWriter writer(
+        ofs, {.mvhd_timescale = 1000,
+              .duration = duration,
+              .ftyp_params = shiguredo::mp4::box::FtypParameters{.major_brand = shiguredo::mp4::BrandIsom,
+                                                                 .minor_version = 0,
+                                                                 .compatible_brands = {
+                                                                     shiguredo::mp4::BrandMp41,
+                                                                 }}});
+    writer.writeFtypBox();
+    shiguredo::mp4::track::AACTrack aac_trak({.timescale = 48000,
+                                              .duration = duration,
+                                              .track_id = writer.getAndUpdateNextTrackID(),
+                                              .buffer_size_db = 0,
+                                              .max_bitrate = 64000,
+                                              .avg_bitrate = 64000,
+                                              .writer = &writer});
+    shiguredo::mp4::track::H264Track h264_trak({.timescale = 16000,
+                                                .duration = duration,
+                                                .track_id = writer.getAndUpdateNextTrackID(),
+                                                .width = 640,
+                                                .height = 240,
+                                                .writer = &writer});
+    for (std::size_t s = 0; s < 16; ++s) {
+      // chunk length: 960ms
+      for (std::size_t j = 0; j < 45; ++j) {
+        const auto i = s * 45 + j;
+        aac_trak.addData(aac_resources[i].timestamp, aac_resources[i].data, aac_resources[i].is_key);
+      }
+      aac_trak.terminateCurrentChunk();
+      for (std::size_t j = 0; j < 24; ++j) {
+        const auto i = s * 24 + j;
+        h264_trak.addData(h264_resources[i].timestamp, h264_resources[i].data, h264_resources[i].is_key);
+      }
+      h264_trak.terminateCurrentChunk();
+    }
+    writer.appendTrakAndUdtaBoxInfo({&aac_trak, &h264_trak});
+    writer.writeFreeBoxAndMdatHeader();
+    writer.writeMoovBox();
+  } else if (subcommands[0] == aach264_faststart) {
+    std::vector<Resource> aac_resources;
+    load_resources_from_csv(&aac_resources, aac_filename);
+    std::vector<Resource> h264_resources;
+    load_resources_from_csv(&h264_resources, h264_filename);
+    std::ofstream ofs(filename, std::ios_base::binary);
+    const float duration = 15.36f;
+    shiguredo::mp4::writer::FaststartWriter writer(
+        ofs, {.mvhd_timescale = 1000,
+              .duration = duration,
+              .ftyp_params = shiguredo::mp4::box::FtypParameters{.major_brand = shiguredo::mp4::BrandIsom,
+                                                                 .minor_version = 0,
+                                                                 .compatible_brands = {
+                                                                     shiguredo::mp4::BrandMp41,
+                                                                 }}});
+
+    writer.writeFtypBox();
+    shiguredo::mp4::track::AACTrack aac_trak({.timescale = 48000,
+                                              .duration = duration,
+                                              .track_id = writer.getAndUpdateNextTrackID(),
+                                              .buffer_size_db = 0,
+                                              .max_bitrate = 64000,
+                                              .avg_bitrate = 64000,
+                                              .writer = &writer});
+    shiguredo::mp4::track::H264Track h264_trak({.timescale = 16000,
+                                                .duration = duration,
+                                                .track_id = writer.getAndUpdateNextTrackID(),
+                                                .width = 640,
+                                                .height = 240,
+                                                .writer = &writer});
+    for (std::size_t s = 0; s < 16; ++s) {
+      // chunk length: 960 ms
+      for (std::size_t j = 0; j < 45; ++j) {
+        const auto i = s * 45 + j;
+        aac_trak.addData(aac_resources[i].timestamp, aac_resources[i].data, aac_resources[i].is_key);
+      }
+      aac_trak.terminateCurrentChunk();
+      for (std::size_t j = 0; j < 24; ++j) {
+        const auto i = s * 24 + j;
+        h264_trak.addData(h264_resources[i].timestamp, h264_resources[i].data, h264_resources[i].is_key);
+      }
+      h264_trak.terminateCurrentChunk();
+    }
+    writer.appendTrakAndUdtaBoxInfo({&aac_trak, &h264_trak});
     writer.writeMoovBox();
     writer.writeMdatHeader();
     writer.copyMdatData();

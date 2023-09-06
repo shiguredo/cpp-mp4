@@ -13,7 +13,7 @@ namespace shiguredo::mp4::track {
 class SounTrack : public Track {
  protected:
   SounTrack();
-  void makeTkhdBoxInfo(BoxInfo*);
+  void makeTkhdBoxInfo(BoxInfo*) override;
   void makeSmhdBoxInfo(BoxInfo*);
 };
 
