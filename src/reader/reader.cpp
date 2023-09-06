@@ -8,6 +8,7 @@
 #include <iostream>
 #include <istream>
 #include <iterator>
+#include <sstream>
 #include <stdexcept>
 #include <string>
 

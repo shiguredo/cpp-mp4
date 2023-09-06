@@ -12,6 +12,17 @@
 
 ## develop
 
+## 2023.2.0
+
+- [UPDATE] 依存ライブラリの更新
+    - `boost` を `1.83.0` に
+    - `rapidcsv` を `8.77` に
+    - @haruyama
+- [ADD] H.264 Track のサポート
+    - @haruyama
+- [UPDATE] AV1 Track の調整
+    - @haruyama
+
 ## 2023.1.1
 
 - [FIX] Version 上げ忘れを修正 #25 
