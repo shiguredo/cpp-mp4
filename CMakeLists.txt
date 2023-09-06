@@ -11,7 +11,7 @@ set(CMAKE_CXX_COMPILER clang++)
 include(cmake/env.cmake)
 include(cmake/tools.cmake)
 
-set_cache_string_from_env(BOOST_VERSION 1.81.0 "Boost のバージョン")
+set_cache_string_from_env(BOOST_VERSION 1.83.0 "Boost のバージョン")
 set_cache_string_from_env(CLI11_VERSION 2.3.2 "CLI11 のバージョン")
 set_cache_string_from_env(FMT_VERSION 9.1.0 "fmt のバージョン")
 set_cache_string_from_env(RAPIDCSV_VERSION 8.69 "rapidcsv のバージョン")
