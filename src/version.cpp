@@ -8,7 +8,7 @@
 namespace shiguredo::mp4 {
 
 std::string get_version_string() {
-  return "2023.1.1";
+  return "2023.2.1";
 }
 
 }  // namespace shiguredo::mp4
