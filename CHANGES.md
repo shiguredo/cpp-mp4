@@ -12,6 +12,11 @@
 
 ## develop
 
+## 2023.2.1
+
+- [FIX] Version 上げ忘れを修正
+    - @haruyama
+
 ## 2023.2.0
 
 - [UPDATE] 依存ライブラリの更新
