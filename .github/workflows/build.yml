@@ -35,7 +35,7 @@ jobs:
           sudo rm -rf /var/lib/apt/lists/*
         env:
             DEBIAN_FRONTEND: noninteractive
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Cache release directory
         id: cache-release
         uses: actions/cache@v3
