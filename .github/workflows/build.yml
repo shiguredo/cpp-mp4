@@ -60,16 +60,21 @@ jobs:
           restore-keys: ${{ matrix.os }}-ccache-dir-
       - name: Ccache stat
         run: ccache -s
+      - name: Setup LLVM
+        run: |
+          wget https://apt.llvm.org/llvm.sh
+          chmod +x llvm.sh
+          sudo ./llvm.sh 18
       - name: mkdir release
         shell: bash
         run: |
           [ -d release ] || mkdir release
       - name: cmake
-        run: cmake .. -DCMAKE_BUILD_TYPE=Release -DWITH_TEST=YES -DWITH_CLI=YES -WITH_EXAMPLE=YES
+        run: cmake .. -DCMAKE_BUILD_TYPE=Release -DWITH_TEST=YES -DWITH_CLI=YES -DWITH_EXAMPLE=YES
         working-directory: release
         timeout-minutes: 120
       - name: build
-        run:  cmake --build release
+        run:  cmake --build release -j`nproc`
         timeout-minutes: 120
       - name: Test cpp-mp4
         run: cmake --build release --target test -- ARGS='-V'
