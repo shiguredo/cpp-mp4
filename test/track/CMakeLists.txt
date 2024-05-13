@@ -1,8 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
 
-set(CMAKE_C_COMPILER clang)
-set(CMAKE_CXX_COMPILER clang++)
-
 add_compile_options(
     -Wall
     -Wextra
@@ -104,9 +101,9 @@ add_executable(track_test
 
 set_target_properties(track_test PROPERTIES CXX_STANDARD 20 C_STANDARD 11)
 
+target_include_directories(track_test PRIVATE ../../include)
 target_include_directories(track_test
-    PRIVATE
-    ../../include
+    SYSTEM PRIVATE
     ${boost_algorithm_SOURCE_DIR}/include
     ${boost_assert_SOURCE_DIR}/include
     ${boost_bind_SOURCE_DIR}/include

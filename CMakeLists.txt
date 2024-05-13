@@ -5,8 +5,8 @@ cmake_policy(SET CMP0054 NEW)
 # MSVC runtime library flags are selected by an abstraction.
 cmake_policy(SET CMP0091 NEW)
 
-set(CMAKE_C_COMPILER clang)
-set(CMAKE_CXX_COMPILER clang++)
+set(CMAKE_C_COMPILER clang-18)
+set(CMAKE_CXX_COMPILER clang++-18)
 
 include(cmake/env.cmake)
 include(cmake/tools.cmake)
@@ -266,9 +266,9 @@ target_sources(shiguredo-mp4
     src/writer/faststart_writer.cpp
     )
 
+target_include_directories(shiguredo-mp4 PRIVATE include)
 target_include_directories(shiguredo-mp4
-    PRIVATE
-    include
+    SYSTEM PRIVATE
     ${boost_assert_SOURCE_DIR}/include
     ${boost_bind_SOURCE_DIR}/include
     ${boost_config_SOURCE_DIR}/include
@@ -312,9 +312,9 @@ if(WITH_CLI)
         src/cli/mp4-tool.cpp
         )
 
+    target_include_directories(mp4-tool PRIVATE include)
     target_include_directories(mp4-tool
-        PRIVATE
-        include
+        SYSTEM PRIVATE
         ${boost_assert_SOURCE_DIR}/include
         ${boost_bind_SOURCE_DIR}/include
         ${boost_config_SOURCE_DIR}/include
@@ -369,10 +369,9 @@ if(WITH_EXAMPLE)
         example/resource/resource.cpp
         )
 
+    target_include_directories(mp4-muxer PRIVATE include example)
     target_include_directories(mp4-muxer
-        PRIVATE
-        include
-        example
+        SYSTEM PRIVATE
         ${boost_assert_SOURCE_DIR}/include
         ${boost_bind_SOURCE_DIR}/include
         ${boost_config_SOURCE_DIR}/include
