@@ -3,10 +3,13 @@
 [![GitHub tag (latest SemVer)](https://img.shields.io/github/tag/shiguredo/cpp-mp4.svg)](https://github.com/shiguredo/cpp-mp4)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-**このライブラリはメンテナンスモードで、バグフィックスのみ対応します**
+> [!IMPORTANT]  
+> このライブラリはメンテナンスモードで、バグフィックスのみ対応します。
 
-Rust にはなりますが、以下の利用を検討してください。
-[shiguredo/mp4\-rust: MP4 library](https://github.com/shiguredo/mp4-rust)
+> [!NOTE]  
+> 現在 Rust 版の Hisui を開発中です、
+> [shiguredo/mp4\-rust: MP4 library](https://github.com/shiguredo/mp4-rust) の利用を検討してください。
+
 
 ## About Shiguredo's open source software
 
