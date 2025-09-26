@@ -4,7 +4,7 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 > [!IMPORTANT]  
-> このライブラリはメンテナンスモードで、バグフィックスのみ対応します。
+> このライブラリはメンテナンスを終了しました。
 
 > [!NOTE]  
 > [shiguredo/mp4\-rust: MP4 library](https://github.com/shiguredo/mp4-rust) の利用を検討してください。
